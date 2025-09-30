@@ -1,0 +1,22 @@
+{
+    "name": "PWA Demo",
+    "short_name": "PWA",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2563eb",
+    "description": "Exemplo PWA com Next.js e Tailwind",
+    "icons": [
+      {
+        "src": "/icon-192.jpeg",
+        "sizes": "192x192",
+        "type": "image/jpeg"
+      },
+      {
+        "src": "/icon-192.jpeg",
+        "sizes": "512x512",
+        "type": "image/jpeg"
+      }
+    ]
+  }
+  
