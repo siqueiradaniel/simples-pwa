@@ -1,53 +1,35 @@
-export type Service = {
-    id: number
-    name: string
-    description?: string
-    duration?: number
-    price: number
+export type SupermarketChain = {
+  id: number 
+  cnpj: string 
+  name: string 
+  logoUrl: string
+  deliveryEndTime: number
+  minimumOrderValue: number
 }
 
-export type Barber = {
-    id: number
-    name: string
-    email: string
-    passwordHash: string
-    birthDate: Date
-    age: number
-    hiredAt: Date
-    active: boolean
-}
+export type StockLevel = 'low' | 'medium' | 'high' | 'out_of_stock'
 
-export type Client = {
-    id: number
-    name: string
-    email: string
-    passwordHash: string
-    role: 'CLIENT' | 'ADMIN'
-}
-
-export type BarberService = {
-    barberId: number
-    serviceId: number
-}
-
-export type Schedule = {
-    id: number
-    clientId?: number
-    barberId: number
-    serviceId: number
-    date: Date
-    time: string
-    cancelledAt?: Date
-    status: 'SCHEDULED' | 'CANCELLED' | 'FINISHED'
-}
-
-// Tipos para visualização com dados relacionados
-export type ScheduleWithDetails = Schedule & {
-    client?: Client
-    barber: Barber
-    service: Service
-}
-
-export type BarberWithServices = Barber & {
-    services: Service[]
+export type BranchProduct = {
+  id: number
+  stockQuantity: number
+  initialQuantity: number
+  minQuantity: number
+  wantedQuantity: number
+  buyPrice: number
+  sellPrice: number
+  profit: number
+  totalCost: number | null
+  totalToEarn: number | null
+  currentEarn: number | null
+  stockLevel: StockLevel
+  expirationDate: string
+  isAvailable: boolean
+  isPromotion: boolean
+  productId: number
+  branchId: number
+  // Dados adicionais para exibição
+  productName: string
+  productImage: string
+  brand: string
+  unit: string
 }
