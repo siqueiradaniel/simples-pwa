@@ -1,6 +1,8 @@
-import { BranchProduct } from "@/types";
-import { Minus, Plus, Trash2 } from "lucide-react";
-import { useState } from "react";
+'use client'
+
+import React, { useState } from 'react'
+import { Plus, Minus, Trash2 } from 'lucide-react'
+import { BranchProduct } from '../types'
 
 const ProductCard = ({ product }: { product: BranchProduct }) => {
   const [quantity, setQuantity] = useState(0);

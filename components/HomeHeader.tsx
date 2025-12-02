@@ -1,5 +1,5 @@
 import React from 'react'
-import { SupermarketChain } from '@/types'
+import { SupermarketChain } from '../types'
 
 const HomeHeader = () => {
   const supermarket: SupermarketChain = {
@@ -12,17 +12,17 @@ const HomeHeader = () => {
   }
 
   return (
-    <div className='w-full flex flex-row justify-between items-center bg-white '>
-      <div className='flex flex-col p-4 gap-3'>
-        <p className='text-black text-2xl'>
+    <div className='w-full flex flex-row justify-between items-center bg-white border-b border-gray-100'>
+      <div className='flex flex-col p-4 gap-2'>
+        <p className='text-black text-2xl font-bold tracking-tight'>
           {supermarket.name}
         </p>
-        <div>
-          <p className='text-gray-500 text-sm'>
+        <div className="flex flex-col gap-1">
+          <p className='text-gray-500 text-xs'>
             Entregas até {supermarket.deliveryEndTime}h 
           </p>
-          <p className='text-gray-500 text-sm'>
-            Pedido min. a partir de R$ {supermarket.minimumOrderValue}
+          <p className='text-gray-500 text-xs'>
+            Pedido min. a partir de R$ {supermarket.minimumOrderValue},00
           </p>
         </div>
       </div>

@@ -1,8 +1,12 @@
-import { BranchProduct } from "@/types";
-import ProductCard from "@/components/ProductCard"
+import React from 'react'
+import ProductCard from './ProductCard'
+import { BranchProduct } from '../types'
 
-const VerticalScrollingCategory = ({ title }: { title: string }) => {
-  // Mock products typed correctly
+interface VerticalScrollingCategoryProps {
+  title: string
+}
+
+const VerticalScrollingCategory = ({ title }: VerticalScrollingCategoryProps) => {
   const mockProducts: BranchProduct[] = [
     {
       id: 1, stockQuantity: 50, initialQuantity: 100, minQuantity: 10, wantedQuantity: 80, buyPrice: 3.50, sellPrice: 23.43, profit: 3.49, totalCost: 350, totalToEarn: 699, currentEarn: 349, stockLevel: 'high', expirationDate: '2025-12-31', isAvailable: true, isPromotion: false, productId: 101, branchId: 1,
@@ -22,7 +26,7 @@ const VerticalScrollingCategory = ({ title }: { title: string }) => {
       productImage: 'https://placehold.co/150x150?text=Macarrao', 
       brand: 'Gallo', unit: '500g'
     }
-  ];
+  ]
 
   return (
     <div className='w-full bg-white py-3 border-t border-gray-50'>
@@ -42,6 +46,6 @@ const VerticalScrollingCategory = ({ title }: { title: string }) => {
       </div>
     </div>
   )
-};
+}
 
 export default VerticalScrollingCategory
