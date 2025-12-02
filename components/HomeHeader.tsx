@@ -27,7 +27,15 @@ const HomeHeader = () => {
         </div>
       </div>
       <div className='py-2 px-4'>
-        <img className='rounded-xl' src={supermarket.logoUrl} width={80}/>
+        <img 
+          className='rounded-xl object-cover h-16 w-16 bg-gray-100' 
+          src={supermarket.logoUrl} 
+          width={80}
+          alt="Logo Supermercado"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = 'https://placehold.co/80x80?text=Logo';
+          }}
+        />
       </div>
     </div>
   )
