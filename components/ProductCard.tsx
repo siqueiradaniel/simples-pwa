@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react'
 import { Plus, Minus, Trash2 } from 'lucide-react'
-import { BranchProduct } from '../types'
+import { UIProduct } from '../types'
 
-const ProductCard = ({ product }: { product: BranchProduct }) => {
+const ProductCard = ({ product }: { product: UIProduct }) => {
   const [quantity, setQuantity] = useState(0);
 
   const handleIncrement = () => setQuantity(prev => prev + 1);
@@ -13,15 +13,15 @@ const ProductCard = ({ product }: { product: BranchProduct }) => {
   const formattedPrice = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL'
-  }).format(product.sellPrice);
+  }).format(product.sell_price);
 
   return (
     <div className='min-w-[150px] w-[150px] bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col p-3 relative snap-start'>
       {/* Imagem */}
       <div className='w-full h-28 mb-2 flex items-center justify-center'>
         <img 
-          src={product.productImage} 
-          alt={product.productName}
+          src={product.image_url} 
+          alt={product.name}
           className="max-h-full max-w-full object-contain"
           onError={(e) => {
              (e.target as HTMLImageElement).src = 'https://placehold.co/100x100?text=Prod';
@@ -32,7 +32,7 @@ const ProductCard = ({ product }: { product: BranchProduct }) => {
       {/* Info */}
       <div className='flex flex-col flex-1 gap-1'>
         <h3 className='text-gray-700 font-semibold text-xs leading-tight line-clamp-2 h-[2.4em]'>
-          {product.productName}
+          {product.name}
         </h3>
         <span className='text-gray-400 text-[10px]'>{product.unit}</span>
         

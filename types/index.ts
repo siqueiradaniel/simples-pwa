@@ -27,9 +27,21 @@ export type BranchProduct = {
   isPromotion: boolean
   productId: number
   branchId: number
-  // Dados adicionais para exibição
-  productName: string
-  productImage: string
-  brand: string
-  unit: string
 }
+
+export type Product = {
+  id: number;
+  name: string;
+  description: string | null;
+  image_url: string | null;
+};
+
+export type UIProduct = {
+  id: number;
+  name: string;
+  unit: string;
+  sell_price: number;
+  category_title: string;
+  image_url: string;
+};
+

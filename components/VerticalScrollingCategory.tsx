@@ -1,33 +1,13 @@
-import React from 'react'
-import ProductCard from './ProductCard'
-import { BranchProduct } from '../types'
+'use client';
+
+import ProductCard from "./ProductCard";
 
 interface VerticalScrollingCategoryProps {
-  title: string
+  title: string;
+  products: any[];  // ou tipado com seu BranchProductWithInventory
 }
 
-const VerticalScrollingCategory = ({ title }: VerticalScrollingCategoryProps) => {
-  const mockProducts: BranchProduct[] = [
-    {
-      id: 1, stockQuantity: 50, initialQuantity: 100, minQuantity: 10, wantedQuantity: 80, buyPrice: 3.50, sellPrice: 23.43, profit: 3.49, totalCost: 350, totalToEarn: 699, currentEarn: 349, stockLevel: 'high', expirationDate: '2025-12-31', isAvailable: true, isPromotion: false, productId: 101, branchId: 1,
-      productName: 'Arroz - Sepé Bianco Tipo 1',
-      productImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88kamtBQWt-3eAGCV6THLyeJV7gbFSPISSKJxFI9RvQ&s', 
-      brand: 'Sepé', unit: '5kg'
-    },
-    {
-      id: 2, stockQuantity: 30, initialQuantity: 60, minQuantity: 5, wantedQuantity: 50, buyPrice: 4.20, sellPrice: 8.49, profit: 4.29, totalCost: 252, totalToEarn: 509, currentEarn: 257, stockLevel: 'medium', expirationDate: '2025-11-30', isAvailable: true, isPromotion: true, productId: 102, branchId: 1,
-      productName: 'Feijão Carioca Camil',
-      productImage: 'https://www.camil.com.br/wp-content/uploads/sites/12/2020/06/mkp-feijao-carioca-1kg-removebg-preview-300x300.png', 
-      brand: 'Camil', unit: '1kg'
-    },
-    {
-      id: 3, stockQuantity: 45, initialQuantity: 80, minQuantity: 8, wantedQuantity: 70, buyPrice: 3.80, sellPrice: 7.49, profit: 3.69, totalCost: 304, totalToEarn: 599, currentEarn: 295, stockLevel: 'high', expirationDate: '2026-01-15', isAvailable: true, isPromotion: false, productId: 103, branchId: 1,
-      productName: 'Macarrão Espaguete Gallo',
-      productImage: 'https://www.arenaatacado.com.br/on/demandware.static/-/Sites-storefront-catalog-sv/default/dwe6328910/Produtos/37699-7896022200732-macarrao%20semola%20espaguete%20galo%20500g-galo-1.jpg', 
-      brand: 'Gallo', unit: '500g'
-    }
-  ]
-
+export default function VerticalScrollingCategory({ title, products }: VerticalScrollingCategoryProps) {
   return (
     <div className='w-full bg-white py-3 border-t border-gray-50'>
       <div className='flex justify-between items-center px-4 mb-3'>
@@ -39,13 +19,11 @@ const VerticalScrollingCategory = ({ title }: VerticalScrollingCategoryProps) =>
 
       <div className='overflow-x-auto scrollbar-hide pb-2'>
         <div className='flex gap-3 px-4 w-max snap-x'>
-          {mockProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {products.map(product => (
+            <ProductCard key={product.product_id} product={product} />
           ))}
         </div>
       </div>
     </div>
-  )
+  );
 }
-
-export default VerticalScrollingCategory
