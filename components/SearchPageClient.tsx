@@ -1,11 +1,14 @@
 'use client';
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
 import SearchBar from '@/components/SearchBar';
 import ProductCard from '@/components/ProductCard';
-import { UIProduct } from "@/types";
+import { UIProduct } from "@/types"; 
 
 export default function SearchPageClient({ products }: { products: UIProduct[] }) {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
 
   // Filtra produtos com base na busca
@@ -15,12 +18,24 @@ export default function SearchPageClient({ products }: { products: UIProduct[] }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Barra de pesquisa interativa */}
-      <SearchBar 
-        value={searchTerm} 
-        onChange={setSearchTerm} 
-        autoFocus={true} 
-      />
+      {/* Header com Voltar + Barra de Pesquisa */}
+      <div className="sticky top-0 z-40 bg-white shadow-sm">
+        <div className="flex items-center px-2 py-2">
+          <button 
+            onClick={() => router.back()} 
+            className="p-2 text-gray-600 hover:bg-gray-100 rounded-full mr-1"
+          >
+            <ChevronLeft size={24} />
+          </button>
+          <div className="flex-1">
+            <SearchBar 
+              value={searchTerm} 
+              onChange={setSearchTerm} 
+              autoFocus={true} 
+            />
+          </div>
+        </div>
+      </div>
 
       <div className="px-4 pb-4">
         <h1 className="text-lg font-bold text-gray-800 mb-3 mt-2">
