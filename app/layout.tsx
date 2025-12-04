@@ -20,8 +20,8 @@ export default function RootLayout({
       <head>
         {/* PWA tags */}
         <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" href="/newLogo.png" /> 
-        <link rel="apple-touch-icon" href="/newLogo.png" />        
+        <link rel="icon" href="/idealLogo.png" /> 
+        <link rel="apple-touch-icon" href="/idealLogo.png" />        
         <meta name="theme-color" content="#000000" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
