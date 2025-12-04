@@ -10,7 +10,7 @@ const BottomNavigationBar = () => {
   // Mapeamento simples de rotas para IDs ativos
   const getActiveTab = (path: string) => {
     if (path === '/') return 'Home';
-    if (path.includes('/search')) return 'Offer'; // Exemplo: Ativa 'Offer' quando na busca
+    if (path.includes('/offer')) return 'Offer'; // Exemplo: Ativa 'Offer' quando na busca
     if (path.includes('/routes')) return 'Routes';
     if (path.includes('/cart')) return 'Compra';
     if (path.includes('/account')) return 'Account';
@@ -23,7 +23,7 @@ const BottomNavigationBar = () => {
     { id: 'Home', icon: HomeIcon, label: 'Home', href: '/' },
     { id: 'Routes', icon: MapPin, label: 'Routes', href: '/routes' },
     { id: 'Compra', icon: ShoppingCart, label: 'Compra', badge: 3, href: '/cart' },
-    { id: 'Offer', icon: Tag, label: 'Offer', href: '/search' }, // Usando Offer como link para Busca por enquanto
+    { id: 'Offer', icon: Tag, label: 'Offer', href: '/offer' }, // Usando Offer como link para Busca por enquanto
     { id: 'Account', icon: User, label: 'Account', href: '/account' },
   ];
 
