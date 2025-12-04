@@ -37,7 +37,7 @@ export type Product = {
 };
 
 export type UIProduct = {
-  id: number;
+  product_id: number;
   name: string;
   unit: string;
   sell_price: number;

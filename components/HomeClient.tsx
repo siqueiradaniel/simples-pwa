@@ -6,14 +6,14 @@ import { Home as HomeIcon } from "lucide-react";
 import HomeHeader from '@/components/HomeHeader'
 import SearchBar from '@/components/SearchBar'
 import VerticalScrollingCategory from '@/components/VerticalScrollingCategory'
-import BottomNavigationBar from '@/components/BottomNavigationBar'
 import { UIProduct } from "@/types";
+// BottomNavigationBar removido daqui pois está no layout
 
 export default function HomeClient({ products }: { products: UIProduct[] }) {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isStandalone, setIsStandalone] = useState(false);
   const [canInstall, setCanInstall] = useState(false);
-  
+
   // Agrupa categorias
   const categories = new Map<string, any[]>();
   for (const product of products) {
@@ -41,16 +41,14 @@ export default function HomeClient({ products }: { products: UIProduct[] }) {
 
   const handleInstall = async () => {
     if (!deferredPrompt) return;
-
     deferredPrompt.prompt();
     await deferredPrompt.userChoice;
-
     setDeferredPrompt(null);
     setCanInstall(false);
   };
 
   return isStandalone ? (
-    <div className="min-h-screen bg-gray-50 pb-24 font-sans relative">
+    <div className="font-sans relative">
       <style jsx global>{`
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
@@ -58,15 +56,14 @@ export default function HomeClient({ products }: { products: UIProduct[] }) {
       `}</style>
 
       <HomeHeader />
-      <SearchBar />
+      {/* SearchBar apenas visual, clica para navegar */}
+      <SearchBar readOnly />
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 pb-4">
         {Array.from(categories.entries()).map(([title, items]) => (
           <VerticalScrollingCategory key={title} title={title} products={items} />
         ))}
       </div>
-
-      <BottomNavigationBar />
     </div>
   ) : (
     <main className="flex items-center justify-center h-screen bg-gray-50 px-4">

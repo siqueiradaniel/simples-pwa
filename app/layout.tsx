@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import BottomNavigationBar from '@/components/BottomNavigationBar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,8 +27,11 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="ClickBeard" />
         <link rel="apple-touch-icon" href="/icon.png" />
       </head>
-      <body className={`${inter.className} bg-neutral-900`}>
-        <main>{children}</main>
+      <body className={`${inter.className} bg-gray-50`}>
+        <main className="pb-20 min-h-screen">
+          {children}
+        </main>
+        <BottomNavigationBar />
       </body>
     </html>
   )

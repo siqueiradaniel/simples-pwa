@@ -1,15 +1,30 @@
+'use client';
+
 import { HomeIcon, MapPin, ShoppingCart, Tag, User } from "lucide-react";
-import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const BottomNavigationBar = () => {
-  const [activeTab, setActiveTab] = useState('Home');
+  const pathname = usePathname();
+
+  // Mapeamento simples de rotas para IDs ativos
+  const getActiveTab = (path: string) => {
+    if (path === '/') return 'Home';
+    if (path.includes('/search')) return 'Offer'; // Exemplo: Ativa 'Offer' quando na busca
+    if (path.includes('/routes')) return 'Routes';
+    if (path.includes('/cart')) return 'Compra';
+    if (path.includes('/account')) return 'Account';
+    return '';
+  };
+
+  const activeTab = getActiveTab(pathname);
 
   const navItems = [
-    { id: 'Home', icon: HomeIcon, label: 'Home' },
-    { id: 'Routes', icon: MapPin, label: 'Routes' },
-    { id: 'Compra', icon: ShoppingCart, label: 'Compra', badge: 3 },
-    { id: 'Offer', icon: Tag, label: 'Offer' },
-    { id: 'Account', icon: User, label: 'Account' },
+    { id: 'Home', icon: HomeIcon, label: 'Home', href: '/' },
+    { id: 'Routes', icon: MapPin, label: 'Routes', href: '/routes' },
+    { id: 'Compra', icon: ShoppingCart, label: 'Compra', badge: 3, href: '/cart' },
+    { id: 'Offer', icon: Tag, label: 'Offer', href: '/search' }, // Usando Offer como link para Busca por enquanto
+    { id: 'Account', icon: User, label: 'Account', href: '/account' },
   ];
 
   return (
@@ -19,9 +34,9 @@ const BottomNavigationBar = () => {
         const isActive = activeTab === item.id;
         
         return (
-          <button
+          <Link
             key={item.id}
-            onClick={() => setActiveTab(item.id)}
+            href={item.href}
             className={`flex flex-col items-center justify-center w-full gap-1 transition-colors duration-200 ${
               isActive ? 'text-cyan-500' : 'text-gray-300'
             }`}
@@ -35,11 +50,11 @@ const BottomNavigationBar = () => {
               )}
             </div>
             <span className="text-[10px] font-medium">{item.label}</span>
-          </button>
+          </Link>
         );
       })}
     </div>
   );
 };
 
-export default BottomNavigationBar
+export default BottomNavigationBar;

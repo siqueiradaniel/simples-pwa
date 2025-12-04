@@ -1,10 +1,11 @@
 'use client';
 
+import { UIProduct } from "@/types";
 import ProductCard from "./ProductCard";
 
 interface VerticalScrollingCategoryProps {
   title: string;
-  products: any[];  // ou tipado com seu BranchProductWithInventory
+  products: UIProduct[];  
 }
 
 export default function VerticalScrollingCategory({ title, products }: VerticalScrollingCategoryProps) {
