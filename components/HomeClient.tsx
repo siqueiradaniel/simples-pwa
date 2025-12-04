@@ -7,12 +7,13 @@ import HomeHeader from '@/components/HomeHeader'
 import SearchBar from '@/components/SearchBar'
 import VerticalScrollingCategory from '@/components/VerticalScrollingCategory'
 import BottomNavigationBar from '@/components/BottomNavigationBar'
+import { UIProduct } from "@/types";
 
-export default function HomeClient({ products }: { products: any[] }) {
+export default function HomeClient({ products }: { products: UIProduct[] }) {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isStandalone, setIsStandalone] = useState(false);
   const [canInstall, setCanInstall] = useState(false);
-  console.log(products)
+  
   // Agrupa categorias
   const categories = new Map<string, any[]>();
   for (const product of products) {
