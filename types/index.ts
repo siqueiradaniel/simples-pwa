@@ -46,7 +46,7 @@ export type UIProduct = {
 };
 
 export type OrderWithUser = {
-  id: number; 
+  id: number;
   fullName: string;
   phoneNumber: string;
   status: string;
@@ -83,4 +83,22 @@ export type AdminProduct = {
   total_stock_quantity: number;
   min_price: number | null;
   max_price: number | null;
+};
+
+// NOVO TIPO PARA A TELA DE BRANCH
+export type BranchManagement = {
+  branch_id: number;
+  branch_name: string;
+  branch_email: string;
+  branch_phone: string;
+  address_id: number | null;
+  supermarket_chain_id: number;
+  chain_name: string;
+  chain_logo: string;
+  street: string;
+  number: number | null;
+  neighborhood: string;
+  city: string;
+  state: string;
+  cep: string;
 };

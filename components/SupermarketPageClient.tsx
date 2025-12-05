@@ -1,7 +1,7 @@
 'use client';
 
 import ChainHeader from "./ChainHeader";
-import BranchCard from "./BranchCard";
+import BranchManagementCard from "./BranchManagementCard";
 import { SupermarketWithBranch } from "@/types";
 import { Package, Users, BarChart3, ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -17,24 +17,24 @@ export default function SupermarketPageClient({ data }: { data: SupermarketWithB
     );
   }
 
-  // Itens do menu administrativo
+  // Mantivemos o menu administrativo global, pois ele é útil para coisas que não são de uma filial específica (ex: relatórios globais)
   const managementMenu = [
     { 
-      label: "Relatórios", 
+      label: "Relatórios Globais", 
       icon: BarChart3, 
-      href: "/reports", // Placeholder
-      disabled: true // Visualmente desativado por enquanto
-    },
-    { 
-      label: "Usuários", 
-      icon: Users, 
-      href: "/users", // Placeholder
+      href: "/reports",
       disabled: true 
     },
     { 
-      label: "Produtos", 
+      label: "Gestão de Usuários", 
+      icon: Users, 
+      href: "/users", 
+      disabled: true 
+    },
+    { 
+      label: "Catálogo Geral de Produtos", 
       icon: Package, 
-      href: "/supermarket-products", // Link funcional para a tela que criamos
+      href: "/supermarket-products", 
       disabled: false
     },
   ];
@@ -48,9 +48,9 @@ export default function SupermarketPageClient({ data }: { data: SupermarketWithB
         branchCount={data.length}
       />
 
-      {/* Menu de Gestão Administrativa */}
+      {/* Menu de Gestão Administrativa Global */}
       <div className="bg-white border-b border-gray-100 mb-6">
-        {managementMenu.map((item, index) => {
+        {managementMenu.map((item) => {
           const Icon = item.icon;
           return (
             <Link
@@ -72,18 +72,19 @@ export default function SupermarketPageClient({ data }: { data: SupermarketWithB
       </div>
 
       <div className="px-4 pb-24 max-w-2xl mx-auto">
-        <div className="flex items-center justify-between mb-4 px-2">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
-            Suas Filiais
+        <div className="flex items-center justify-between mb-4 px-1">
+          <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+            Filiais & Operações
           </h2>
-          <button className="text-xs text-blue-600 font-medium hover:underline px-2 py-1 rounded hover:bg-blue-50 transition-colors">
+          <button className="text-xs text-blue-600 font-medium hover:bg-blue-50 px-3 py-1 rounded-full transition-colors">
             + Nova Filial
           </button>
         </div>
         
+        {/* Lista de Filiais com Ações Diretas */}
         <div className="flex flex-col gap-4">
           {data.map((branch) => (
-            <BranchCard key={branch.branch_id} data={branch} />
+            <BranchManagementCard key={branch.branch_id} data={branch} />
           ))}
         </div>
       </div>
