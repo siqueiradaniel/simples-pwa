@@ -54,3 +54,20 @@ export type OrderWithUser = {
   dAt: string;
 };
 
+export type SupermarketWithBranch = {
+  chain_id: number;
+  chain_name: string;
+  chain_logo: string;
+  chain_cnpj: string;
+  branch_id: number;
+  branch_name: string;
+  branch_phone: string;
+  branch_email: string;
+  street: string;
+  number: number | null;
+  neighborhood: string;
+  city: string;
+  state: string;
+  cep: string;
+};
+
