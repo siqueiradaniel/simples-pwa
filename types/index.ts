@@ -71,3 +71,16 @@ export type SupermarketWithBranch = {
   cep: string;
 };
 
+export type AdminProduct = {
+  product_id: number;
+  code: string;
+  name: string;
+  description: string | null;
+  image_url: string | null;
+  unit: string;
+  units_sold: number;
+  category_title: string;
+  total_stock_quantity: number;
+  min_price: number | null;
+  max_price: number | null;
+};
