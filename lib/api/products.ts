@@ -1,4 +1,5 @@
 import { supabaseServer } from '../supabase/server';
+import { UIProduct } from '@/types';
 
 export async function getProductsForBranch(branchId: number) {
   const supabase = supabaseServer();
@@ -11,5 +12,5 @@ export async function getProductsForBranch(branchId: number) {
     throw new Error('Failed to load products for branch');
   }
 
-  return data;
+  return data as UIProduct[];
 }

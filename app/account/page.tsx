@@ -1,7 +1,13 @@
-export default function AccountPage() {
-  return (
-    <div className="flex items-center justify-center h-screen bg-gray-50">
-      <h1 className="text-gray-500">Minha Conta (Em construção)</h1>
-    </div>
-  );
+import AccountPageClient from "@/components/AccountPageClient";
+import { getOrdersWithUsers } from "@/lib/api/orders";
+import { OrderWithUser } from "@/types";
+
+export default async function AccountPage() {
+  const branchId = 1; // Fixo por enquanto
+  
+  // Busca os pedidos reais. 
+  // Nota: Idealmente, essa função deveria filtrar pelo ID do usuário logado também.
+  const orders: OrderWithUser[] = await getOrdersWithUsers(branchId);
+
+  return <AccountPageClient orders={orders} />;
 }

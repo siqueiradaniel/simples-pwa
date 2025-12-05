@@ -45,3 +45,12 @@ export type UIProduct = {
   image_url: string;
 };
 
+export type OrderWithUser = {
+  id: number; 
+  fullName: string;
+  phoneNumber: string;
+  status: string;
+  totalPrice: number;
+  dAt: string;
+};
+
