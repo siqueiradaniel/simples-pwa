@@ -102,3 +102,35 @@ export type BranchManagement = {
   state: string;
   cep: string;
 };
+
+// O resumo que aparece na lista principal
+export type InventorySummary = {
+  config_id: number;
+  branch_id: number;
+  product_id: number;
+  sell_price: number;
+  min_stock_limit: number;
+  is_available: boolean;
+  product_name: string;
+  product_code: string;
+  image_url: string | null;
+  unit: string;
+  category_title: string;
+  total_stock: number;
+  next_expiration: string | null;
+  average_cost: number;
+};
+
+// O detalhe do lote (quando clicar no produto)
+export type ProductBatch = {
+  id: number;
+  branch_product_config_id: number;
+  batch_code: string | null;
+  quantity: number;
+  initial_quantity: number;
+  cost_price: number;
+  expiration_date: string | null;
+  arrival_date: string;
+  supplier: string | null;
+  status: 'active' | 'consumed' | 'expired';
+};
