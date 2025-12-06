@@ -30,3 +30,20 @@ export async function getProductBatches(configId: number) {
 
   return data as ProductBatch[];
 }
+
+// ADICIONE ESTA FUNÇÃO:
+// Busca os dados consolidados de um produto específico (Cabeçalho da tela de detalhes)
+export async function getProductConfigDetails(configId: number) {
+    const supabase = supabaseServer();
+  
+    const { data, error } = await supabase
+      .rpc('get_branch_product_config_details', { config_id_input: configId })
+      .single(); // Esperamos apenas 1 resultado
+  
+    if (error) {
+      console.error('getProductConfigDetails error:', error);
+      throw new Error('Failed to load product details');
+    }
+  
+    return data as InventorySummary;
+  }
