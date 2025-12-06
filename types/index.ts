@@ -170,3 +170,38 @@ export type SupermarketUser = {
   supermarket_chain_id: number;
   created_at: string;
 };
+
+export type OrderDetails = {
+  order_id: number;
+  status: 'PENDING' | 'PAID' | 'CANCELED' | 'FINISHED' | 'EM_PRODUCAO' | 'A_CAMINHO' | 'DELIVERED'; // Ajuste conforme seu ENUM real
+  payment_status: string;
+  order_number: number;
+  created_at: string;
+  finished_at: string | null;
+  total_price: number;
+  delivery_fee: number;
+  discount: number;
+  customer_name: string;
+  customer_phone: string;
+  street: string;
+  address_number: number | null;
+  neighborhood: string;
+  city: string;
+  state: string;
+  complement: string | null;
+  reference: string | null;
+  market_name: string;
+  market_logo: string | null;
+  branch_name: string;
+};
+
+export type OrderItem = {
+  order_id: number;
+  product_id: number;
+  quantity: number;
+  unit_price: number;
+  subtotal: number;
+  product_name: string;
+  product_image: string | null;
+  product_unit: string;
+};
