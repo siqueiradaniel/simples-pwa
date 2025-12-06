@@ -1,5 +1,5 @@
 import { supabaseServer } from '../supabase/server';
-import { Address } from '@/types';
+import { Address, UserAddress } from '@/types';
 
 // Busca um endereço pelo ID (Para edição)
 export async function getAddressById(addressId: number) {
@@ -75,4 +75,42 @@ export async function linkAddressToUser(userId: number, addressId: number, label
     });
     if (error) throw new Error(error.message);
   }
+}
+
+// Busca todos os endereços de um usuário
+export async function getUserAddresses(userId: number) {
+  const supabase = supabaseServer();
+
+  const { data, error } = await supabase
+    .from('user_address')
+    .select(`
+      id,
+      user_id,
+      address_id,
+      label,
+      is_default,
+      address (
+        id,
+        street,
+        number,
+        neighborhood,
+        city,
+        state,
+        cep,
+        complement,
+        reference
+      )
+    `)
+    .eq('user_id', userId)
+    .order('is_default', { ascending: false }); // Padrão primeiro
+
+  if (error) {
+    console.error('getUserAddresses error:', error);
+    return [];
+  }
+
+  // Ajuste de tipagem para garantir que o retorno corresponda ao esperado
+  // O supabase retorna um array de objetos onde 'address' é um objeto único ou array dependendo da relação
+  // Aqui assumimos que é um objeto único (relação 1:1 no join)
+  return data as unknown as UserAddress[];
 }
