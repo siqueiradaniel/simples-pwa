@@ -157,3 +157,16 @@ export type UserAddress = {
   is_default: boolean;
   address?: Address; // Join
 };
+
+export type SupermarketUser = {
+  id: number; // ou string/uuid dependendo da sua tabela real, ajustei para number conforme seu schema anterior mas atenção se for uuid
+  full_name: string;
+  email: string;
+  phone_number: string;
+  user_role: 'ADMIN' | 'CUSTOMER' | 'MANAGER';
+  is_active: boolean;
+  is_blocked: boolean;
+  last_login: string | null;
+  supermarket_chain_id: number;
+  created_at: string;
+};

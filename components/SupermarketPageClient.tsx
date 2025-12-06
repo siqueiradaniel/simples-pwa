@@ -29,7 +29,7 @@ export default function SupermarketPageClient({ data }: { data: SupermarketWithB
       label: "Gestão de Usuários", 
       icon: Users, 
       href: "/users", 
-      disabled: true 
+      disabled: false 
     },
     { 
       label: "Catálogo Geral de Produtos", 
