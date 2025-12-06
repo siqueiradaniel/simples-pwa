@@ -134,3 +134,26 @@ export type ProductBatch = {
   supplier: string | null;
   status: 'active' | 'consumed' | 'expired';
 };
+
+export type Address = {
+  id?: number; // Opcional na criação
+  cep: string;
+  street: string;
+  number: number;
+  neighborhood: string;
+  city: string;
+  state: string;
+  complement?: string | null;
+  reference?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+};
+
+export type UserAddress = {
+  id: number;
+  user_id: number;
+  address_id: number;
+  label: string; // "Casa", "Trabalho", "Outro"
+  is_default: boolean;
+  address?: Address; // Join
+};
