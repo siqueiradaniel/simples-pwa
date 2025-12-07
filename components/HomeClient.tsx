@@ -27,7 +27,7 @@ export default function HomeClient({ products }: { products: UIProduct[] }) {
       window.matchMedia("(display-mode: standalone)").matches ||
       (window.navigator as any).standalone === true;
 
-    setIsStandalone(standalone || true);
+    setIsStandalone(standalone);
 
     const handler = (e: Event) => {
       e.preventDefault();
