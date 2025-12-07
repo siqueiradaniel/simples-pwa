@@ -222,3 +222,29 @@ export type CartItemInput = {
   product_id: number;
   quantity: number;
 };
+
+export type OrderForRouting = {
+  order_id: number;
+  order_number: number;
+  status: string;
+  total_price: number;
+  created_at: string;
+  branch_id: number;
+  customer_name: string;
+  street: string;
+  address_number: number | null;
+  neighborhood: string;
+  city: string;
+  latitude: number | null;
+  longitude: number | null;
+};
+
+export type ActiveRouteSummary = {
+  route_id: number;
+  estimated_time: number; // em minutos
+  estimated_distance: number; // em km
+  actual_time: number | null;
+  deliveries_count: number;
+  route_status: 'IN_PROGRESS' | 'COMPLETED';
+  neighborhoods: string;
+};

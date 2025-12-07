@@ -1,7 +1,14 @@
-export default function RoutesPage() {
-  return (
-    <div className="flex items-center justify-center h-screen bg-gray-50">
-      <h1 className="text-gray-500">Rotas (Em construção)</h1>
-    </div>
-  );
+import RoutesPageClient from "@/components/RoutesPageClient";
+import { getPendingRoutingOrders, getActiveRoutes } from "@/lib/api/routes";
+
+export default async function RoutesPage() {
+  const branchId = 1; // Fixo por enquanto
+
+  // Busca paralela
+  const [pendingOrders, activeRoutes] = await Promise.all([
+    getPendingRoutingOrders(branchId),
+    getActiveRoutes()
+  ]);
+
+  return <RoutesPageClient pendingOrders={pendingOrders} activeRoutes={activeRoutes} />;
 }
