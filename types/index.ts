@@ -205,3 +205,20 @@ export type OrderItem = {
   product_image: string | null;
   product_unit: string;
 };
+
+// Tipo específico para manipulação no carrinho (mais leve que OrderItem completo)
+export type CartItem = {
+  product_id: number;
+  quantity: number;
+  unit_price: number;
+  name: string;
+  image_url: string | null;
+  unit: string;
+  subtotal: number;
+};
+
+// Tipo para envio ao backend (Sync)
+export type CartItemInput = {
+  product_id: number;
+  quantity: number;
+};
