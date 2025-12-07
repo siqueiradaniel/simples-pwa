@@ -53,3 +53,39 @@ export async function syncCart(orderId: number, items: CartItemInput[]) {
 
   if (error) throw new Error(error.message);
 }
+
+
+
+
+// Atualiza o endereço de entrega do pedido
+export async function updateOrderAddress(orderId: number, addressId: number) {
+  const supabase = supabaseServer();
+
+  const { error } = await supabase
+    .from('orders')
+    .update({ address_id: addressId })
+    .eq('id', orderId);
+
+  if (error) {
+    console.error('updateOrderAddress error:', error);
+    throw new Error('Failed to update order address');
+  }
+}
+
+// Busca dados básicos do pedido atual (para saber o total)
+export async function getCurrentOrder(orderId: number) {
+  const supabase = supabaseServer();
+
+  const { data, error } = await supabase
+    .from('orders')
+    .select('id, total_price, delivery_fee, discount')
+    .eq('id', orderId)
+    .single();
+
+  if (error) {
+    console.error('getCurrentOrder error:', error);
+    return null;
+  }
+
+  return data;
+}

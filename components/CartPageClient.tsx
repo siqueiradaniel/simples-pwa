@@ -61,7 +61,7 @@ export default function CartPageClient({ initialItems, orderId, minOrderValue }:
       await syncCart(orderId, payload);
       
       // Navega para a próxima tela (Endereço)
-      router.push('/addresses'); 
+      router.push('/checkout/address'); 
     } catch (error) {
       console.error(error);
       alert("Erro ao salvar carrinho. Tente novamente.");
