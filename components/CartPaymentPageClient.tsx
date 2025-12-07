@@ -30,8 +30,8 @@ export default function CartPaymentPageClient({ orderId, totalPrice, items }: Ca
     setIsFinishing(true);
     try {
       await finishOrder(orderId, selectedMethod, {});
-      alert("Pedido realizado com sucesso!");
-      router.push('/orders/' + orderId); // Vai para detalhes do pedido finalizado
+      // Redireciona para a tela de sucesso em vez de detalhes diretos
+      router.push(`/checkout/success/${orderId}`);
     } catch (error) {
       console.error(error);
       alert("Erro ao finalizar pedido.");
