@@ -69,11 +69,10 @@ export default function ReportPageClient({ data }: { data: DashboardFullData }) 
           />
         </div>
 
-        {/* Gráfico de Vendas */}
+        
         <SalesChart data={salesChart} />
 
         {/* Distribuição por Bairro (Donut) */}
-        {console.log(customersByNeighborhood)}
         <NeighborhoodChart data={customersByNeighborhood} />
 
         {/* Top 5 Mais Vendidos */}

@@ -23,7 +23,7 @@ const BottomNavigationBar = () => {
     { id: 'Home', icon: HomeIcon, label: 'Home', href: '/' },
     { id: 'Routes', icon: MapPin, label: 'Routes', href: '/routes' },
     { id: 'Compra', icon: ShoppingCart, label: 'Compra', badge: 3, href: '/cart' },
-    { id: 'Offer', icon: Tag, label: 'Offer', href: '/offer' }, // Usando Offer como link para Busca por enquanto
+    //{ id: 'Offer', icon: Tag, label: 'Offer', href: '/offer' }, // Promoções serão implementadas posteriormente
     { id: 'Account', icon: User, label: 'Account', href: '/account' },
   ];
 
