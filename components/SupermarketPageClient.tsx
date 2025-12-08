@@ -23,7 +23,7 @@ export default function SupermarketPageClient({ data }: { data: SupermarketWithB
       label: "Relatórios Globais", 
       icon: BarChart3, 
       href: "/reports",
-      disabled: true 
+      disabled: false 
     },
     { 
       label: "Gestão de Usuários", 

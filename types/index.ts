@@ -248,3 +248,50 @@ export type ActiveRouteSummary = {
   route_status: 'IN_PROGRESS' | 'COMPLETED';
   neighborhoods: string;
 };
+
+// Tipos para o Dashboard
+export type DashboardKPIs = {
+  revenue: number;
+  orders: number;
+  active_customers: number;
+  avg_ticket: number;
+};
+
+export type SalesChartData = {
+  date_label: string;
+  total_sales: number;
+  order_count: number;
+};
+
+export type TopProductData = {
+  name: string;
+  quantity_sold: number;
+  revenue_generated: number;
+};
+
+export type CategoryShareData = {
+  title: string;
+  sales_count: number;
+};
+
+export type DashboardFullData = {
+  kpis: DashboardKPIs;
+  salesChart: SalesChartData[];
+  topProducts: TopProductData[];
+  categoryShare: CategoryShareData[];
+  deadStock: DeadStockProduct[]; // Novo
+  customersByNeighborhood: NeighborhoodShareData[]; // Novo
+};
+
+export type DeadStockProduct = {
+  name: string;
+  image_url: string | null;
+  current_stock: number;
+  category_title: string;
+};
+
+export type NeighborhoodShareData = {
+  neighborhood: string;
+  customer_count: number;
+};
+
