@@ -2,12 +2,13 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import BottomNavigationBar from '@/components/BottomNavigationBar'
+import CartInitializer from '@/components/CartInitializer' 
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'ClickBeard - Sistema de Agendamento para Barbearias',
-  description: 'Agende seus serviços na melhor barbearia da cidade',
+  title: 'Ideal - Sistema de compras online',
+  description: 'Realize suas compras sem sair de casa',
 }
 
 export default function RootLayout({
@@ -28,6 +29,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="ClickBeard" />
       </head>
       <body className={`${inter.className} bg-gray-50`}>
+        <CartInitializer />
         <main className="pb-20 min-h-screen">
           {children}
         </main>

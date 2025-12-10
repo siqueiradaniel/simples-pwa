@@ -1,4 +1,5 @@
 import { supabaseServer } from '../supabase/server';
+import { createSupabaseClient } from '../supabase/client'; // Client-side para interações do usuário
 import { CartItem, CartItemInput } from '@/types';
 
 // Obtém o ID do pedido 'CURRENT' (cria se não existir)
@@ -88,4 +89,23 @@ export async function getCurrentOrder(orderId: number) {
   }
 
   return data;
+}
+
+// Nova função para atualizar item único (Client-Side friendly)
+export async function updateCartItem(orderId: number, productId: number, quantity: number) {
+  // Aqui usamos o cliente do browser (createSupabaseClient) porque será chamado de um Contexto Client-Side
+  // Se usássemos supabaseServer(), daria erro de cookies no client
+  const supabase = createSupabaseClient();
+
+  const { error } = await supabase
+    .rpc('update_cart_item_quantity', { 
+      order_id_input: orderId,
+      product_id_input: productId,
+      quantity_input: quantity
+    });
+
+  if (error) {
+    console.error('updateCartItem error:', error);
+    throw new Error('Failed to update item');
+  }
 }

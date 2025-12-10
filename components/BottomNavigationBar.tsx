@@ -3,14 +3,25 @@
 import { HomeIcon, MapPin, ShoppingCart, Tag, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCartStore } from "@/lib/store/cartStore";
+
+type NavItem = {
+  id: string;
+  icon: React.ComponentType<any>;
+  label: string;
+  href: string;
+  badge?: number; // optional
+};
+
 
 const BottomNavigationBar = () => {
   const pathname = usePathname();
+  // Seletor: apenas a contagem de itens
+  const cartCount = useCartStore(state => state.items.length);
 
-  // Mapeamento simples de rotas para IDs ativos
   const getActiveTab = (path: string) => {
     if (path === '/') return 'Home';
-    if (path.includes('/offer')) return 'Offer'; // Exemplo: Ativa 'Offer' quando na busca
+    if (path.includes('/offer')) return 'Offer';
     if (path.includes('/routes')) return 'Routes';
     if (path.includes('/cart')) return 'Compra';
     if (path.includes('/account')) return 'Account';
@@ -19,10 +30,10 @@ const BottomNavigationBar = () => {
 
   const activeTab = getActiveTab(pathname);
 
-  const navItems = [
+  const navItems: NavItem[] = [
     { id: 'Home', icon: HomeIcon, label: 'Home', href: '/' },
     { id: 'Routes', icon: MapPin, label: 'Routes', href: '/routes' },
-    { id: 'Compra', icon: ShoppingCart, label: 'Compra', badge: 3, href: '/cart' },
+    { id: 'Compra', icon: ShoppingCart, label: 'Compra', badge: cartCount, href: '/cart' },
     //{ id: 'Offer', icon: Tag, label: 'Offer', href: '/offer' }, // Promoções serão implementadas posteriormente
     { id: 'Account', icon: User, label: 'Account', href: '/account' },
   ];
@@ -32,19 +43,19 @@ const BottomNavigationBar = () => {
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = activeTab === item.id;
-        
+
         return (
           <Link
             key={item.id}
             href={item.href}
             className={`flex flex-col items-center justify-center w-full gap-1 transition-colors duration-200 ${
               isActive ? 'text-cyan-500' : 'text-gray-300'
-            }`}
+              }`}
           >
             <div className="relative">
               <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
-              {item.badge && (
-                <div className="absolute -top-1.5 -right-1.5 bg-cyan-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">
+              {item.id === 'Compra' && (item.badge ?? 0) > 0 && (
+                <div className="absolute -top-1.5 -right-1.5 bg-cyan-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white animate-in zoom-in">
                   {item.badge}
                 </div>
               )}

@@ -672,9 +672,46 @@ export type Database = {
         }
       }
       get_supermarkets_with_users: { Args: never; Returns: Json }
+      update_cart_item_quantity: {
+        Args: {
+          order_id_input: number
+          product_id_input: number
+          quantity_input: number
+        }
+        Returns: void
+      }
+      get_or_create_current_order: {
+        Args: {
+          user_id_input: number
+          branch_id_input: number
+        }
+        Returns: number
+      }
+      get_order_items_by_id: {
+        Args: {
+          order_id_input: number
+        }
+        Returns: {
+          order_id: number
+          product_id: number
+          quantity: number
+          unit_price: number
+          subtotal: number
+          product_name: string
+          product_image: string | null
+          product_unit: string
+        }[]
+      }
+      sync_cart: {
+        Args: {
+          order_id_input: number
+          items_input: { product_id: number; quantity: number }[]
+        }
+        Returns: void
+      }
     }
     Enums: {
-      order_status: "PENDING" | "PAID" | "CANCELED" | "FINISHED"
+      order_status: "PENDING" | "PAID" | "CANCELED" | "FINISHED" | "CURRENT"
       payment_status: "PENDING" | "CONFIRMED" | "CANCELED"
       product_category: "FOOD" | "DRINKS" | "CLEANING" | "HYGIENE" | "OTHER"
       stock_level: "LOW" | "MEDIUM" | "HIGH"
@@ -806,7 +843,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      order_status: ["PENDING", "PAID", "CANCELED", "FINISHED"],
+      order_status: ["PENDING", "PAID", "CANCELED", "FINISHED", "CURRENT"],
       payment_status: ["PENDING", "CONFIRMED", "CANCELED"],
       product_category: ["FOOD", "DRINKS", "CLEANING", "HYGIENE", "OTHER"],
       stock_level: ["LOW", "MEDIUM", "HIGH"],
