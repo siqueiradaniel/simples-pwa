@@ -14,9 +14,11 @@ export default function ProfileOrders({ orders }: ProfileOrdersProps) {
   
   const getStatusText = (status: string) => {
     const map: Record<string, string> = {
+      'PENDING': 'Pagamento Pendente',
       'PAID': 'Pagamento Confirmado',
       'FINISHED': 'Compra Finalizada',
-      'CANCELED': 'Compra Cancelada'
+      'CANCELED': 'Compra Cancelada',
+      'CURRENT': 'Compra Atual'
     };
     return map[status] || status;
   };

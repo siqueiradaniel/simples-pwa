@@ -47,13 +47,13 @@ export type UIProduct = {
 
 export type OrderWithUser = {
   id: number;
+  user_id: number; // Novo campo
   fullName: string;
   phoneNumber: string;
   status: string;
   totalPrice: number;
   dAt: string;
 };
-
 export type SupermarketWithBranch = {
   chain_id: number;
   chain_name: string;
