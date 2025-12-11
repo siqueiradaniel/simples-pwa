@@ -1,13 +1,15 @@
 'use client';
 
 import { useState } from "react";
-import { ChevronLeft, Plus, Loader2 } from "lucide-react";
+import { ChevronLeft, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { UserAddress } from "@/types";
-import CheckoutStepper from "./CheckoutStepper";
-import SelectableAddressCard from "./SelectableAddressCard";
+import CheckoutStepper from "@/components/CheckoutStepper";
+import SelectableAddressCard from "./SelectableAddressCard"; // Assumindo que este componente existe no seu projeto
 import { updateOrderAddress } from "@/lib/api/cart";
+import { useCartStore } from "@/lib/store/cartStore"; // Zustand importado
+import CartFooter from "./CartFooter"; // Footer compartilhado importado
 
 interface CartAddressPageClientProps {
   addresses: UserAddress[];
@@ -18,12 +20,18 @@ interface CartAddressPageClientProps {
 export default function CartAddressPageClient({ addresses, orderId, totalPrice }: CartAddressPageClientProps) {
   const router = useRouter();
   
+  // Zustand: recupera itens para cálculo dinâmico do total
+  const items = useCartStore(state => state.items);
+
   // Seleciona o endereço padrão ou o primeiro da lista
   const defaultSelection = addresses.find(a => a.is_default)?.id || addresses[0]?.address_id;
   const [selectedAddressId, setSelectedAddressId] = useState<number | undefined>(defaultSelection);
   const [isSaving, setIsSaving] = useState(false);
 
-  const formattedTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPrice);
+  // Cálculo do total:
+  // Usa o total do Zustand (cliente) se houver itens, senão usa o initial (SSR)
+  const storeTotal = items.reduce((acc, item) => acc + (item.unit_price * item.quantity), 0);
+  const displayTotal = items.length > 0 ? storeTotal : totalPrice;
 
   const handleContinue = async () => {
     if (!selectedAddressId) {
@@ -36,7 +44,7 @@ export default function CartAddressPageClient({ addresses, orderId, totalPrice }
       await updateOrderAddress(orderId, selectedAddressId);
       // Próximo passo: Pagamento
       router.push('/checkout/payment');
-      alert("Endereço vinculado! Próximo passo: Pagamento (Em breve)");
+      // alert("Endereço vinculado! Próximo passo: Pagamento (Em breve)");
     } catch (error) {
       console.error(error);
       alert("Erro ao selecionar endereço. Tente novamente.");
@@ -46,7 +54,7 @@ export default function CartAddressPageClient({ addresses, orderId, totalPrice }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans pb-32">
+    <div className="min-h-screen bg-gray-50 font-sans pb-[200px]">
       {/* Header com Stepper Integrado */}
       <div className="bg-white">
         <div className="px-4 pt-4 flex items-center mb-2">
@@ -58,7 +66,7 @@ export default function CartAddressPageClient({ addresses, orderId, totalPrice }
         <CheckoutStepper currentStep={2} />
       </div>
 
-      <div className="px-4">
+      <div className="px-4 mt-6">
         <h1 className="text-lg font-bold text-gray-900 mb-4 text-center">Selecione o endereço</h1>
 
         <div className="flex flex-col gap-3">
@@ -88,22 +96,14 @@ export default function CartAddressPageClient({ addresses, orderId, totalPrice }
         </div>
       </div>
 
-      {/* Footer Fixo */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 pb-safe z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <div className="flex justify-between items-end mb-4 px-2">
-          <span className="text-sm font-bold text-gray-900">Total a pagar</span>
-          <span className="text-xl font-extrabold text-gray-900">{formattedTotal}</span>
-        </div>
-
-        <button
-          onClick={handleContinue}
-          disabled={!selectedAddressId || isSaving}
-          className="w-full bg-blue-900 text-white font-bold text-sm py-3.5 rounded-xl shadow-lg shadow-blue-900/20 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:bg-blue-800"
-        >
-          {isSaving && <Loader2 size={18} className="animate-spin" />}
-          {isSaving ? "Processando..." : "CONTINUAR PARA PAGAMENTO"}
-        </button>
-      </div>
+      {/* Footer Reutilizado */}
+      <CartFooter 
+        total={displayTotal}
+        onNext={handleContinue}
+        isLoading={isSaving}
+        buttonText="CONTINUAR PARA PAGAMENTO"
+        isButtonDisabled={!selectedAddressId} 
+      />
     </div>
   );
 }
