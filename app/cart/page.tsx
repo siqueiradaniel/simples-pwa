@@ -1,4 +1,4 @@
-import CartPageClient from "@/components/CartPageClient";
+import CartPageClient from "@/components/checkout/cart/CartPageClient";
 import { getOrCreateCartId } from "@/lib/api/cart";
 
 // Opcional: Impedir cache para garantir que sempre pegue o status atual ao entrar

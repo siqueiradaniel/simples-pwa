@@ -1,4 +1,4 @@
-import CategoryPageClient from "@/components/CategoryPageClient";
+import CategoryPageClient from "@/components/home/CategoryPageClient";
 import { getProductsForBranch } from "@/lib/api/products";
 
 // Esta função diz ao Next.js quais páginas gerar no momento do build (SSG)

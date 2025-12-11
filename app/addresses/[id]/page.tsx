@@ -1,4 +1,4 @@
-import AddressDetailClient from "@/components/AddressDetailClient";
+import AddressDetailClient from "@/components/address/AddressDetailClient";
 import { getAddressById } from "@/lib/api/address";
 import { notFound } from "next/navigation";
 

@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import { DashboardFullData } from "@/types";
 import KPICard from "./report/KPICard";
 import SalesChart from "./report/SalesChart";
+import NeighborhoodChart from "./report/NeighborhoodChart";
 import ProductRanking from "./report/ProductRanking";
 import DeadStockList from "./report/DeadStockList";
-import NeighborhoodChart from "./report/NeighborhoodChart";
+
 
 export default function ReportPageClient({ data }: { data: DashboardFullData }) {
   const router = useRouter();

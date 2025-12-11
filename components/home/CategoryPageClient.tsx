@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from "react";
-import SearchBar from '@/components/SearchBar';
-import ProductCard from '@/components/ProductCard';
+import SearchBar from '@/components/home/SearchBar';
+import ProductCard from '@/components/home/ProductCard';
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { UIProduct } from "@/types";

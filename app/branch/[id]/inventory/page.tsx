@@ -1,4 +1,5 @@
-import InventoryPageClient from "@/components/InventoryPageClient";
+
+import InventoryPageClient from "@/components/branch/InventoryPageClient";
 import { getInventorySummary } from "@/lib/api/inventory";
 
 interface PageProps {

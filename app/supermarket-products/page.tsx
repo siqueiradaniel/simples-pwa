@@ -1,4 +1,4 @@
-import AdminProductsClient from "@/components/AdminProductsClient";
+import SupermarketProductsClient from "@/components/supermarket/SupermarketProductsClient";
 import { getSupermarketProducts } from "@/lib/api/supermarket-products";
 
 export default async function SupermarketProductsPage() {
@@ -7,5 +7,5 @@ export default async function SupermarketProductsPage() {
   // Busca os dados no servidor
   const products = await getSupermarketProducts(chainId);
 
-  return <AdminProductsClient products={products} />;
+  return <SupermarketProductsClient products={products} />;
 }

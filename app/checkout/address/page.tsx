@@ -1,6 +1,7 @@
-import CartAddressPageClient from "@/components/CartAddressPageClient";
+
 import { getOrCreateCartId, getCurrentOrder } from "@/lib/api/cart";
 import { getUserAddresses } from "@/lib/api/address";
+import CartAddressPageClient from "@/components/checkout/address/CartAddressPageClient";
 
 export default async function CheckoutAddressPage() {
   const userId = 1; // Fixo por enquanto

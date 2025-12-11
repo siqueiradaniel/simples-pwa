@@ -1,4 +1,4 @@
-import UserDataDisplay from "@/components/UserDataDisplay";
+import UserDataDisplay from "@/components/users/UserDataDisplay";
 import { getUserById } from "@/lib/api/user";
 import { notFound } from "next/navigation";
 

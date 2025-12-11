@@ -1,4 +1,4 @@
-import UsersPageClient from "@/components/UsersPageClient";
+import UsersPageClient from "@/components/users/UsersPageClient";
 import { getSupermarketUsers } from "@/lib/api/users";
 
 export default async function UsersPage() {

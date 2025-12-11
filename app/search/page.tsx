@@ -1,4 +1,4 @@
-import SearchPageClient from "@/components/SearchPageClient";
+import SearchPageClient from "@/components/home/SearchPageClient";
 import { getProductsForBranch } from "@/lib/api/products";
 import { UIProduct } from "@/types";
 

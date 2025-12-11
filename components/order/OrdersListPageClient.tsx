@@ -1,6 +1,6 @@
 'use client';
 
-import ProfileOrders from "@/components/ProfileOrders";
+import ProfileOrders from "@/components/order/ProfileOrders";
 import { OrderWithUser } from "@/types";
 import { ShoppingBag } from "lucide-react";
 

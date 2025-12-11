@@ -1,5 +1,5 @@
 // app/account/page.tsx
-import AccountPageClient from "@/components/AccountPageClient";
+import AccountPageClient from "@/components/account/AccountPageClient";
 import { getOrdersWithUsers } from "@/lib/api/orders";
 import { OrderWithUser } from "@/types";
 

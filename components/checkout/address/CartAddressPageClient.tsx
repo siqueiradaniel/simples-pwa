@@ -5,12 +5,12 @@ import { ChevronLeft, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { UserAddress } from "@/types";
-import CheckoutStepper from "@/components/CheckoutStepper";
-import SelectableAddressCard from "./SelectableAddressCard"; // Assumindo que este componente existe no seu projeto
+import CheckoutStepper from "@/components/checkout/cart/CheckoutStepper";
 import { updateOrderAddress } from "@/lib/api/cart";
 import { useCartStore } from "@/lib/store/cartStore"; // Zustand importado
-import CartFooter from "./CartFooter"; // Footer compartilhado importado
 import { toast } from "sonner";
+import SelectableAddressCard from "@/components/checkout/address/SelectableAddressCard";
+import CartFooter from "@/components/checkout/cart/CartFooter";
 
 interface CartAddressPageClientProps {
   addresses: UserAddress[];

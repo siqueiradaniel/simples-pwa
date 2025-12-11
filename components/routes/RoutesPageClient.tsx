@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { Plus, Map as MapIcon, List, Navigation } from "lucide-react";
-import RouteMap from "./routes/RouteMap";
-import PendingOrderCard from "./routes/PendingOrderCard";
-import ActiveRouteCard from "./routes/ActiveRouteCard";
+import RouteMap from "./RouteMap";
+import PendingOrderCard from "./PendingOrderCard";
+import ActiveRouteCard from "./ActiveRouteCard";
 import { OrderForRouting, ActiveRouteSummary } from "@/types";
 
 interface RoutesPageClientProps {

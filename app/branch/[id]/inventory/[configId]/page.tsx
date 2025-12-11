@@ -1,4 +1,4 @@
-import ProductDetailsPageClient from "@/components/ProductDetailsPageClient";
+import ProductDetailsPageClient from "@/components/branch/ProductDetailsPageClient";
 import { getProductConfigDetails, getProductBatches } from "@/lib/api/inventory";
 
 interface PageProps {

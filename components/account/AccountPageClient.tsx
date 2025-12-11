@@ -1,7 +1,7 @@
 'use client';
 
-import ProfileActionsList from "@/components/ProfileActionsList";
-import ProfileImageContent from "@/components/ProfileImageContent";
+import ProfileActionsList from "@/components/account/ProfileActionsList";
+import ProfileImageContent from "@/components/account/ProfileImageContent";
 import { OrderWithUser } from "@/types";
 
 interface AccountPageClientProps {

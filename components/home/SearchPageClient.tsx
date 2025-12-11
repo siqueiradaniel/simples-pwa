@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
-import SearchBar from '@/components/SearchBar';
-import ProductCard from '@/components/ProductCard';
+import SearchBar from '@/components/home/SearchBar';
+import ProductCard from '@/components/home/ProductCard';
 import { UIProduct } from "@/types"; 
 
 export default function SearchPageClient({ products }: { products: UIProduct[] }) {

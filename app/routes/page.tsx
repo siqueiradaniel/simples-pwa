@@ -1,4 +1,4 @@
-import RoutesPageClient from "@/components/RoutesPageClient";
+import RoutesPageClient from "@/components/routes/RoutesPageClient";
 import { getPendingRoutingOrders, getActiveRoutes } from "@/lib/api/routes";
 
 export default async function RoutesPage() {

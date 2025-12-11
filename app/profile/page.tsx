@@ -1,4 +1,4 @@
-import UserDataForm from "@/components/UserDataForm";
+import UserDataForm from "@/components/users/UserDataForm";
 import { getUserById } from "@/lib/api/user";
 import { notFound } from "next/navigation";
 

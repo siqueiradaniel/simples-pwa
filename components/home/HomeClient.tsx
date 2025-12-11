@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { Home as HomeIcon } from "lucide-react";
 
-import HomeHeader from '@/components/HomeHeader'
-import SearchBar from '@/components/SearchBar'
-import VerticalScrollingCategory from '@/components/VerticalScrollingCategory'
+import HomeHeader from '@/components/home/HomeHeader'
+import SearchBar from '@/components/home/SearchBar'
+import VerticalScrollingCategory from '@/components/home/VerticalScrollingCategory'
 import { UIProduct } from "@/types";
 // BottomNavigationBar removido daqui pois está no layout
 

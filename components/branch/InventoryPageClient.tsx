@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from "react";
-import InventoryHeader from "./InventoryHeader";
-import InventorySummaryCard from "./InventorySummaryCard";
+import InventoryHeader from "@/components/branch/InventoryHeader";
+import InventorySummaryCard from "@/components/branch/InventorySummaryCard";
 import { InventorySummary } from "@/types";
 
 export default function InventoryPageClient({ inventory }: { inventory: InventorySummary[] }) {

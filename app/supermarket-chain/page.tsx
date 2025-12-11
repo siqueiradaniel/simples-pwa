@@ -1,4 +1,4 @@
-import SupermarketPageClient from "@/components/SupermarketPageClient";
+import SupermarketPageClient from "@/components/supermarket/SupermarketPageClient";
 import { getSupermarketChain } from "@/lib/api/supermarket";
 
 export default async function SupermarketChainPage() {

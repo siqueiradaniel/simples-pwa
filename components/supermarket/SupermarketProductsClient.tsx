@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import ProductsHeader from "./ProductsHeader";
-import AdminProductCard from "./AdminProductCard";
+import AdminProductCard from "./SupermarketProductCard";
 import { AdminProduct } from "@/types";
 
-export default function AdminProductsClient({ products }: { products: AdminProduct[] }) {
+export default function SupermarketProductsClient({ products }: { products: AdminProduct[] }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   // Filtra por nome ou código

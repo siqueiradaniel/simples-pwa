@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import CartItemCard from "./CartItemCard";
 import CartFooter from "./CartFooter"; 
 import { useCartStore } from "@/lib/store/cartStore";
-import CheckoutStepper from "@/components/CheckoutStepper";
+import CheckoutStepper from "@/components/checkout/cart/CheckoutStepper";
 
 interface CartPageClientProps {
   orderId: number;

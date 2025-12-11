@@ -1,4 +1,4 @@
-import AddressListClient from "@/components/AddressListClient";
+import AddressListClient from "@/components/address/AddressListClient";
 import { getUserAddresses } from "@/lib/api/address";
 
 // Opcional: Adicionar revalidação para garantir dados frescos

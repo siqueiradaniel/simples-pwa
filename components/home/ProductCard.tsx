@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Plus, Minus, Trash2 } from 'lucide-react'
-import { UIProduct } from '../types'
+import { UIProduct } from '../../types'
 import { useCartStore } from '@/lib/store/cartStore'
 
 const ProductCard = ({ product }: { product: UIProduct }) => {

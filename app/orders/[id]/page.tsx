@@ -1,4 +1,4 @@
-import OrderPageClient from "@/components/OrderPageClient";
+import OrderPageClient from "@/components/order/OrderPageClient";
 import { getOrderDetails, getOrderItems } from "@/lib/api/order";
 import { notFound } from "next/navigation";
 

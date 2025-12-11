@@ -1,4 +1,4 @@
-import OrdersListPageClient from "@/components/OrdersListPageClient";
+import OrdersListPageClient from "@/components/order/OrdersListPageClient";
 import { getOrdersWithUsers } from "@/lib/api/orders";
 import { OrderWithUser } from "@/types";
 

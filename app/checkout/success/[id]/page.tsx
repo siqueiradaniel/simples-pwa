@@ -1,4 +1,4 @@
-import OrderSuccessPageClient from "@/components/OrderSuccessPageClient";
+import OrderSuccessPageClient from "@/components/checkout/success/OrderSuccessPageClient";
 
 interface PageProps {
   params: Promise<{ id: string }>;

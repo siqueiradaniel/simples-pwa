@@ -18,7 +18,7 @@ export default function ProductInfoSection({ product }: { product: InventorySumm
           <img 
             src={product.image_url || ''} 
             alt={product.product_name} 
-            className="w-full h-full object-contain p-2 rounded-[8px]"
+            className="w-full h-full object-contain p-2 rounded-xl"
             onError={(e) => {
                (e.target as HTMLImageElement).src = 'https://placehold.co/100x100?text=Prod';
             }}

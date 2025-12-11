@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import BottomNavigationBar from '@/components/BottomNavigationBar'
+import BottomNavigationBar from '@/components/home/BottomNavigationBar'
 import CartInitializer from '@/components/CartInitializer' 
 import { Toaster } from 'sonner';
 

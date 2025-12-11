@@ -1,4 +1,5 @@
-import CartPaymentPageClient from "@/components/CartPaymentPageClient";
+
+import CartPaymentPageClient from "@/components/checkout/payment/CartPaymentPageClient";
 import { getOrCreateCartId, getCurrentOrder, getCartItems } from "@/lib/api/cart";
 
 export default async function CheckoutPaymentPage() {

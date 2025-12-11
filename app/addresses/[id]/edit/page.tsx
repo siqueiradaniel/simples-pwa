@@ -1,4 +1,4 @@
-import AddressFormClient from "@/components/AddressFormClient";
+import AddressFormClient from "@/components/address/AddressFormClient";
 import { getAddressById } from "@/lib/api/address";
 import { notFound } from "next/navigation";
 

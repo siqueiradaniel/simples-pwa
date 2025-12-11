@@ -3,15 +3,16 @@
 import { useState } from "react";
 import { ChevronLeft, QrCode, CreditCard, Wallet } from "lucide-react";
 import { useRouter } from "next/navigation";
-import CheckoutStepper from "@/components/CheckoutStepper";
-import PaymentMethodOption from "./payment/PaymentMethodOption";
-import PixPaymentForm from "./payment/PixPaymentForm";
-import CreditCardForm from "./payment/CreditCardForm";
-import CheckoutItemList from "./payment/CheckoutItemList";
-import CartFooter from "./CartFooter"; // Importando o footer padronizado
+import CheckoutStepper from "@/components/checkout/cart/CheckoutStepper";
+
 import { CartItem } from "@/types";
 import { finishOrder } from "@/lib/api/payment";
 import { toast } from "sonner";
+import PaymentMethodOption from "./PaymentMethodOption";
+import PixPaymentForm from "./PixPaymentForm";
+import CreditCardForm from "./CreditCardForm";
+import CheckoutItemList from "./CheckoutItemList";
+import CartFooter from "@/components/checkout/cart/CartFooter";
 
 interface CartPaymentPageClientProps {
   orderId: number;

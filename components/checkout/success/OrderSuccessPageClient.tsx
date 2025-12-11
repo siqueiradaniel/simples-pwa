@@ -1,6 +1,6 @@
 'use client';
 
-import CheckoutStepper from "@/components/CheckoutStepper";
+import CheckoutStepper from "@/components/checkout/cart/CheckoutStepper";
 import { CheckCircle2, ShoppingBag, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";

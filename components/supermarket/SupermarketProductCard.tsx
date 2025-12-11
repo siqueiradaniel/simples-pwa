@@ -3,7 +3,7 @@
 import { BarChart3, Package } from "lucide-react";
 import { AdminProduct } from "@/types";
 
-export default function AdminProductCard({ product }: { product: AdminProduct }) {
+export default function SupermarketProductsClient({ product }: { product: AdminProduct }) {
   // Lógica simples para cor do estoque
   const stockColor = product.total_stock_quantity < 50 
     ? "text-orange-600 bg-orange-50" 

@@ -3,7 +3,7 @@
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import ProfileOrdersDay from "./ProfileOrdersDay";
-import { OrderUI } from "./OrderCard";
+import { OrderUI } from "@/components/order/OrderCard";
 import { OrderWithUser } from "@/types";
 
 interface ProfileOrdersProps {

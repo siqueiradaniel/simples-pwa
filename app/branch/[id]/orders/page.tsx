@@ -1,4 +1,4 @@
-import BranchOrdersClient from "@/components/BranchOrdersClient";
+import BranchOrdersClient from "@/components/branch/BranchOrdersClient";
 import { getOrdersWithUsers } from "@/lib/api/orders";
 
 interface PageProps {
