@@ -57,11 +57,11 @@ export default function CartAddressPageClient({ addresses, orderId, totalPrice }
     <div className="min-h-screen bg-gray-50 font-sans pb-[200px]">
       {/* Header com Stepper Integrado */}
       <div className="bg-white">
-        <div className="px-4 pt-4 flex items-center mb-2">
-          <button onClick={() => router.back()} className="p-2 -ml-2 text-gray-500 hover:bg-gray-50 rounded-full transition-colors">
+        <div className="bg-cyan-500 px-4 pt-4 flex items-center pb-2">
+          <button onClick={() => router.back()} className="p-2 -ml-2 text-white hover:bg-gray-50 rounded-full transition-colors">
             <ChevronLeft size={24} />
           </button>
-          <span className="ml-2 font-bold text-gray-700">Checkout</span>
+          <span className="ml-2 font-bold text-white">Checkout</span>
         </div>
         <CheckoutStepper currentStep={2} />
       </div>

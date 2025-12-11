@@ -42,11 +42,11 @@ export default function CartPaymentPageClient({ orderId, totalPrice, items }: Ca
     <div className="min-h-screen bg-gray-50 font-sans pb-[200px]">
       {/* Header */}
       <div className="bg-white">
-        <div className="px-4 pt-4 flex items-center mb-2">
-          <button onClick={() => router.back()} className="p-2 -ml-2 text-gray-500 hover:bg-gray-50 rounded-full transition-colors">
+        <div className="bg-cyan-500 px-4 pt-4 flex items-center pb-2">
+          <button onClick={() => router.back()} className="p-2 -ml-2 text-white hover:bg-gray-50 rounded-full transition-colors">
             <ChevronLeft size={24} />
           </button>
-          <span className="ml-2 font-bold text-gray-700">Pagamento</span>
+          <span className="ml-2 font-bold text-white">Pagamento</span>
         </div>
         <CheckoutStepper currentStep={3} />
       </div>

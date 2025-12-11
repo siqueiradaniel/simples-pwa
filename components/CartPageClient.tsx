@@ -58,12 +58,12 @@ export default function CartPageClient({ orderId, minOrderValue }: CartPageClien
     <div className="min-h-screen bg-gray-50 font-sans pb-[200px]">
       {/* Header com Stepper (Padrão Checkout) */}
       <div className="bg-white">
-        <div className="px-4 pt-4 flex items-center justify-between mb-2">
+        <div className="bg-cyan-500 px-4 pt-4 flex items-center justify-between pb-2">
           <div className="flex items-center">
-            <button onClick={() => router.back()} className="p-2 -ml-2 text-gray-500 hover:bg-gray-50 rounded-full transition-colors">
+            <button onClick={() => router.back()} className="p-2 -ml-2 text-white hover:bg-gray-50 rounded-full transition-colors">
               <ChevronLeft size={24} />
             </button>
-            <span className="ml-2 font-bold text-gray-700">Carrinho</span>
+            <span className="ml-2 font-bold text-white">Carrinho</span>
           </div>
           
         </div>
