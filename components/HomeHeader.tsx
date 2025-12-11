@@ -16,7 +16,7 @@ const HomeHeader = () => {
   return (
     <div className='bg-white pb-2'>
       {/* Faixa Superior Azul */}
-      <div className='bg-cyan-500 pt-8 pb-12 px-4 rounded-b-[2rem] shadow-sm relative'>
+      <div className='bg-cyan-500 pt-8 pb-12 px-4 shadow-sm relative'>
         <div className='flex justify-between items-start'>
           <div className='flex flex-col text-white'>
             <span className='text-cyan-100 text-xs font-semibold uppercase tracking-wider mb-1'>Bem-vindo ao</span>

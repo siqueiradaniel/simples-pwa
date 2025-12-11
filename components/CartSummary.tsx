@@ -25,7 +25,7 @@ export default function CartSummary({ total, minOrderValue }: CartSummaryProps) 
           </div>
           <div className="h-2.5 w-full bg-gray-100 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-orange-400 to-red-500 rounded-full transition-all duration-500 relative"
+              className="h-full bg-linear-to-r from-orange-400 to-red-500 rounded-full transition-all duration-500 relative"
               style={{ width: `${progress}%` }}
             >
                 <div className="absolute top-0 left-0 right-0 bottom-0 bg-white/20 animate-pulse"></div>

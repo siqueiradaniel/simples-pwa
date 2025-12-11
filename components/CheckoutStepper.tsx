@@ -11,7 +11,7 @@ export default function CheckoutStepper({ currentStep }: { currentStep: 1 | 2 | 
   ];
 
   return (
-    <div className="bg-cyan-500 pt-4 pb-8 px-4 rounded-b-[2rem] rounded-t-none shadow-none mb-6">
+    <div className="bg-cyan-500 pt-4 pb-8 px-4 rounded-t-none shadow-none mb-6">
       <div className="flex items-center justify-between max-w-xs mx-auto relative">
         {/* Linha de Conexão (Fundo) */}
         <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-white/30 z-0" />
