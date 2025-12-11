@@ -15,7 +15,7 @@ export default function ChainHeader({ name, logoUrl, cnpj, branchCount }: ChainH
 
   return (
     <div className="bg-white border-b border-gray-100 sticky top-0 z-30">
-      <div className="px-4 py-3 flex items-center justify-between">
+      <div className="px-4 py-3 flex items-center gap-19">
         <button 
           onClick={() => router.back()} 
           className="p-2 -ml-2 text-gray-500 hover:bg-gray-50 rounded-full transition-colors"
@@ -23,9 +23,7 @@ export default function ChainHeader({ name, logoUrl, cnpj, branchCount }: ChainH
           <ChevronLeft size={24} />
         </button>
         <span className="text-sm font-semibold text-gray-900">Visão Geral da Rede</span>
-        <button className="p-2 -mr-2 text-gray-500 hover:bg-gray-50 rounded-full transition-colors">
-          <Settings size={20} />
-        </button>
+        
       </div>
 
       <div className="px-6 pb-6 pt-2 flex items-center gap-5">
