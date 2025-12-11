@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Address } from "@/types";
 import { saveAddress, linkAddressToUser } from "@/lib/api/address";
+import { toast } from "sonner";
 
 interface AddressFormClientProps {
   initialData?: Address; // Opcional, vem preenchido na edição
@@ -75,13 +76,13 @@ export default function AddressFormClient({ initialData, userId }: AddressFormCl
           isDefault
         );
 
-        alert("Endereço salvo!");
+        toast.success("Endereço salvo!");
         router.back(); // Volta para a tela anterior (lista ou perfil)
         router.refresh(); // Atualiza os dados da tela anterior
       }
     } catch (error) {
       console.error(error);
-      alert("Erro ao salvar.");
+      toast.error("Erro ao salvar.");
     } finally {
       setIsSubmitting(false);
     }

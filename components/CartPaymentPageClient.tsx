@@ -11,6 +11,7 @@ import CheckoutItemList from "./payment/CheckoutItemList";
 import CartFooter from "./CartFooter"; // Importando o footer padronizado
 import { CartItem } from "@/types";
 import { finishOrder } from "@/lib/api/payment";
+import { toast } from "sonner";
 
 interface CartPaymentPageClientProps {
   orderId: number;
@@ -24,7 +25,10 @@ export default function CartPaymentPageClient({ orderId, totalPrice, items }: Ca
   const [isFinishing, setIsFinishing] = useState(false);
 
   const handleFinish = async () => {
-    if (!selectedMethod) return;
+    if (!selectedMethod) {
+      toast.error('Selecione uma forma de pagamento.') 
+      return;
+    }
 
     setIsFinishing(true);
     try {
@@ -33,7 +37,7 @@ export default function CartPaymentPageClient({ orderId, totalPrice, items }: Ca
       router.push(`/checkout/success/${orderId}`);
     } catch (error) {
       console.error(error);
-      alert("Erro ao finalizar pedido.");
+      toast.error("Erro ao finalizar pedido.");
       setIsFinishing(false);
     }
   };

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { UserProfile } from "@/lib/api/user";
 import { useRouter } from "next/navigation";
 import { updateUser } from "@/lib/api/user";
+import { toast } from "sonner";
 
 interface UserDataFormProps {
   user: UserProfile;
@@ -34,11 +35,11 @@ export default function UserDataForm({ user }: UserDataFormProps) {
         phone_number: formData.phone_number,
         birth_date: formData.birth_date,
       });
-      alert("Dados atualizados com sucesso!");
+      toast.success("Dados atualizados com sucesso!");
       router.refresh();
     } catch (error) {
       console.error(error);
-      alert("Erro ao atualizar dados.");
+      toast.error("Erro ao atualizar dados.");
     } finally {
       setIsSubmitting(false);
     }

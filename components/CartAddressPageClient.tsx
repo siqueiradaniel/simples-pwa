@@ -10,6 +10,7 @@ import SelectableAddressCard from "./SelectableAddressCard"; // Assumindo que es
 import { updateOrderAddress } from "@/lib/api/cart";
 import { useCartStore } from "@/lib/store/cartStore"; // Zustand importado
 import CartFooter from "./CartFooter"; // Footer compartilhado importado
+import { toast } from "sonner";
 
 interface CartAddressPageClientProps {
   addresses: UserAddress[];
@@ -35,7 +36,7 @@ export default function CartAddressPageClient({ addresses, orderId, totalPrice }
 
   const handleContinue = async () => {
     if (!selectedAddressId) {
-      alert("Por favor, selecione um endereço de entrega.");
+      toast.success("Por favor, selecione um endereço de entrega.");
       return;
     }
 
@@ -44,10 +45,10 @@ export default function CartAddressPageClient({ addresses, orderId, totalPrice }
       await updateOrderAddress(orderId, selectedAddressId);
       // Próximo passo: Pagamento
       router.push('/checkout/payment');
-      // alert("Endereço vinculado! Próximo passo: Pagamento (Em breve)");
+      toast.success("Endereço vinculado!");
     } catch (error) {
       console.error(error);
-      alert("Erro ao selecionar endereço. Tente novamente.");
+      toast.error("Erro ao selecionar endereço. Tente novamente.");
     } finally {
       setIsSaving(false);
     }

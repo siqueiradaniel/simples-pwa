@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import BottomNavigationBar from '@/components/BottomNavigationBar'
 import CartInitializer from '@/components/CartInitializer' 
+import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -34,6 +35,7 @@ export default function RootLayout({
           {children}
         </main>
         <BottomNavigationBar />
+        <Toaster richColors closeButton />
       </body>
     </html>
   )

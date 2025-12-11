@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { createSupabaseClient } from '@/lib/supabase/client';
 import { updateCartItem, getOrCreateCartId, getCartItems } from '@/lib/api/cart';
 import { CartItem } from '@/types';
+import { toast } from 'sonner';
 
 interface CartState {
   items: CartItem[];
@@ -117,7 +118,7 @@ export const useCartStore = create<CartState>((set, get) => ({
     } catch (error) {
       console.error("Erro ao sincronizar item:", error);
       set({ items: previousItems }); // Rollback em caso de erro
-      alert("Erro ao atualizar carrinho. Verifique sua conexão.");
+      toast.error("Erro ao atualizar carrinho. Verifique sua conexão.");
     }
   },
 
