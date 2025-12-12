@@ -1,6 +1,6 @@
 import React from 'react'
 import { MapPin, Clock, Info } from 'lucide-react'
-import { SupermarketChain } from '../types'
+import { SupermarketChain } from '@/types'
 
 const HomeHeader = () => {
   // Mock data - idealmente viria via props ou contexto

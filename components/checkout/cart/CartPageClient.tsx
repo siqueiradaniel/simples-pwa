@@ -49,7 +49,7 @@ export default function CartPageClient({ orderId, minOrderValue }: CartPageClien
     if (!isMinOrderReached) return;
     setIsSaving(true);
     // Simula delay de salvamento/sincronização antes de navegar
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // await new Promise(resolve => setTimeout(resolve, 500));
     router.push('/checkout/address'); 
     setIsSaving(false);
   };

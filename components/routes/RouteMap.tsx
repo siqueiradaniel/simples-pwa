@@ -7,7 +7,7 @@ export default function RouteMap({ orders }: { orders: OrderForRouting[] }) {
   return (
     <div className="w-full h-[40vh] bg-blue-50 relative overflow-hidden border-b border-gray-200">
       {/* Background de Mapa Estilizado */}
-      <div className="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/e/ec/Map_placeholder.png')] bg-cover bg-center opacity-60 grayscale-[20%]" />
+      <div className="absolute inset-0 bg-[url('https://risanb.com/code/colorful-google-maps-marker/default-marker.jpg')] bg-cover bg-center opacity-60 grayscale-[20%]" />
       
       {/* Pins Simulados (Espalhados aleatoriamente para demo visual se não tiver lat/long real) */}
       {orders.map((order, index) => {

@@ -1,11 +1,14 @@
 'use client';
 
 import { useState } from "react";
-import { Plus, Map as MapIcon, List, Navigation } from "lucide-react";
-import RouteMap from "./RouteMap";
-import PendingOrderCard from "./PendingOrderCard";
-import ActiveRouteCard from "./ActiveRouteCard";
+import { Plus, Map as MapIcon, List, Navigation, Loader2 } from "lucide-react";
 import { OrderForRouting, ActiveRouteSummary } from "@/types";
+import { createRoute } from "@/lib/api/routes";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import ActiveRouteCard from "./ActiveRouteCard";
+import PendingOrderCard from "./PendingOrderCard";
+import RouteMap from "./RouteMap";
 
 interface RoutesPageClientProps {
   pendingOrders: OrderForRouting[];
@@ -13,13 +16,37 @@ interface RoutesPageClientProps {
 }
 
 export default function RoutesPageClient({ pendingOrders, activeRoutes }: RoutesPageClientProps) {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<'create' | 'active'>('create');
   const [selectedOrderIds, setSelectedOrderIds] = useState<number[]>([]);
+  const [isCreating, setIsCreating] = useState(false);
 
   const toggleOrderSelection = (id: number) => {
     setSelectedOrderIds(prev => 
       prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
     );
+  };
+
+  const handleCreateRoute = async () => {
+    if (selectedOrderIds.length === 0) return;
+
+    setIsCreating(true);
+    try {
+      await createRoute(selectedOrderIds);
+      toast.success("Rota criada com sucesso!");
+      
+      // Limpa seleção e atualiza dados
+      setSelectedOrderIds([]);
+      router.refresh();
+      
+      // Vai para a aba de rotas ativas para ver o resultado
+      setActiveTab('active');
+    } catch (error) {
+      console.error(error);
+      toast.error("Não foi possível criar a rota.");
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   return (
@@ -93,9 +120,17 @@ export default function RoutesPageClient({ pendingOrders, activeRoutes }: Routes
           {/* Floating Action Button (Criar Rota) */}
           {selectedOrderIds.length > 0 && (
             <div className="fixed bottom-24 left-4 right-4 z-40">
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 active:scale-[0.98] transition-all">
-                <Plus size={20} />
-                Criar Rota com {selectedOrderIds.length} pedidos
+              <button 
+                onClick={handleCreateRoute}
+                disabled={isCreating}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isCreating ? (
+                  <Loader2 size={20} className="animate-spin" />
+                ) : (
+                  <Plus size={20} />
+                )}
+                {isCreating ? "Criando..." : `Criar Rota com ${selectedOrderIds.length} pedidos`}
               </button>
             </div>
           )}
