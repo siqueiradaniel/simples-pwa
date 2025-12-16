@@ -1,7 +1,8 @@
 'use client';
 
-import { MapPin, Box, User, CheckCircle2, Circle } from "lucide-react";
+import { MapPin, User, CheckCircle2, Circle } from "lucide-react";
 import { OrderForRouting } from "@/types";
+import Link from "next/link";
 
 interface PendingOrderCardProps {
   order: OrderForRouting;
@@ -13,25 +14,33 @@ interface PendingOrderCardProps {
 export default function PendingOrderCard({ order, index, isSelected, onToggle }: PendingOrderCardProps) {
   return (
     <div 
-      onClick={onToggle}
-      className={`bg-white p-4 rounded-xl border transition-all duration-200 cursor-pointer active:scale-[0.99] flex gap-3 ${
+      className={`bg-white p-4 rounded-xl border transition-all duration-200 flex gap-3 group/card ${
         isSelected 
           ? 'border-blue-500 bg-blue-50/50 shadow-md' 
           : 'border-gray-100 hover:border-gray-300 shadow-sm'
       }`}
     >
-      {/* Checkbox Visual */}
-      <div className="mt-1">
+      {/* Checkbox Visual - Apenas este dispara a seleção */}
+      <div 
+        className="mt-1 cursor-pointer p-1 -m-1 hover:scale-110 transition-transform" 
+        onClick={(e) => {
+          e.stopPropagation(); // Impede navegação ao clicar no checkbox
+          onToggle();
+        }}
+      >
         {isSelected ? (
           <CheckCircle2 className="text-blue-600" size={20} />
         ) : (
-          <Circle className="text-gray-300" size={20} />
+          <Circle className="text-gray-300 group-hover/card:text-gray-400" size={20} />
         )}
       </div>
 
-      <div className="flex-1 min-w-0">
+      {/* Conteúdo Principal - Link para Detalhes */}
+      <Link href={`/orders/${order.order_id}`} className="flex-1 min-w-0 cursor-pointer block">
         <div className="flex justify-between items-start mb-1">
-          <h3 className="font-bold text-gray-800 text-sm">Pedido #{order.order_number}</h3>
+          <h3 className="font-bold text-gray-800 text-sm group-hover/card:text-blue-600 transition-colors">
+            Pedido #{order.order_number}
+          </h3>
           <span className="text-[10px] font-mono text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">
             {index + 1} no mapa
           </span>
@@ -50,10 +59,10 @@ export default function PendingOrderCard({ order, index, isSelected, onToggle }:
             </span>
           </div>
         </div>
-      </div>
+      </Link>
 
-      {/* Valor */}
-      <div className="flex flex-col justify-end items-end">
+      {/* Valor (Não clicável, mas parte do visual) */}
+      <div className="flex flex-col justify-end items-end pointer-events-none">
         <span className="text-xs font-bold text-gray-900">
           {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(order.total_price)}
         </span>
