@@ -63,3 +63,18 @@ export async function createRoute(orderIds: number[]) {
 
   return route;
 }
+
+
+export async function getRouteOrders(routeId: number) {
+  const supabase = supabaseServer();
+
+  const { data, error } = await supabase
+    .rpc('get_route_details', { route_id_input: routeId });
+
+  if (error) {
+    console.error('getRouteOrders error:', error);
+    return [];
+  }
+
+  return data as OrderForRouting[];
+}
