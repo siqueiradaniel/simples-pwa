@@ -52,19 +52,19 @@ export default function RoutesPageClient({ pendingOrders, activeRoutes }: Routes
   return (
     <div className="min-h-screen bg-gray-50 font-sans pb-24">
       {/* Header */}
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-30 shadow-sm">
-        <div className="px-4 py-3 flex items-center justify-between">
-          <h1 className="text-lg font-bold text-blue-900 flex items-center gap-2">
-            <Navigation size={20} />
+      <div className="bg-cyan-500 text-white sticky top-0 z-30 shadow-sm">
+        <div className="px-4 pt-6 pb-4 flex items-center justify-between">
+          <h1 className="text-xl font-bold flex items-center gap-2">
+            <Navigation size={22} />
             Logística
           </h1>
           
           {/* Tabs Switcher */}
-          <div className="flex bg-gray-100 p-1 rounded-lg">
+          <div className="flex bg-cyan-600 p-1 rounded-lg">
             <button 
               onClick={() => setActiveTab('create')}
               className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${
-                activeTab === 'create' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+                activeTab === 'create' ? 'bg-white text-blue-600 shadow-sm' : 'text-sky-100 hover:bg-white/10'
               }`}
             >
               Planejar
@@ -72,7 +72,7 @@ export default function RoutesPageClient({ pendingOrders, activeRoutes }: Routes
             <button 
               onClick={() => setActiveTab('active')}
               className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${
-                activeTab === 'active' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+                activeTab === 'active' ? 'bg-white text-blue-600 shadow-sm' : 'text-sky-100 hover:bg-white/10'
               }`}
             >
               Em Rota ({activeRoutes.length})
