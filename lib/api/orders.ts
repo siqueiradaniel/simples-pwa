@@ -1,8 +1,10 @@
+'use server';
+
 import { supabaseServer } from '../supabase/server';
 import { OrderWithUser } from '@/types';
 
 export async function getOrdersWithUsers(branchId: number) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .rpc('get_orders_with_users', { bid: branchId });

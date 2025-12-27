@@ -1,8 +1,10 @@
+'use server'
+
 import { supabaseServer } from '../supabase/server';
 import { DashboardFullData } from '@/types';
 
 export async function getDashboardData(branchId: number): Promise<DashboardFullData> {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
   
   const endDate = new Date().toISOString();
   const startDate = new Date();

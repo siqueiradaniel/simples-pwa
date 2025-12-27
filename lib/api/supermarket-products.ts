@@ -1,8 +1,10 @@
+'use server'
+
 import { supabaseServer } from '../supabase/server';
 import { AdminProduct } from '@/types';
 
 export async function getSupermarketProducts(chainId: number) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .rpc('get_supermarket_products', { chain_id_input: chainId });

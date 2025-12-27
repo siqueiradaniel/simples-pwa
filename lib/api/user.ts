@@ -1,3 +1,6 @@
+'use server'
+
+import { revalidatePath } from 'next/cache';
 import { supabaseServer } from '../supabase/server';
 
 export type UserProfile = {
@@ -12,7 +15,7 @@ export type UserProfile = {
 
 // Busca dados do usuário pelo ID
 export async function getUserById(userId: number) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .from('users')
@@ -30,7 +33,7 @@ export async function getUserById(userId: number) {
 
 // Atualiza dados do usuário
 export async function updateUser(userId: number, data: Partial<UserProfile>) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { error } = await supabase
     .from('users')
@@ -40,4 +43,6 @@ export async function updateUser(userId: number, data: Partial<UserProfile>) {
   if (error) {
     throw new Error(error.message);
   }
+
+  revalidatePath('/', 'layout'); // Refreshes everything (Header, Profile, etc.)
 }

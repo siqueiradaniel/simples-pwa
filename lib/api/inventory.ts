@@ -1,9 +1,11 @@
+'use server'
+
 import { supabaseServer } from '../supabase/server';
 import { InventorySummary, ProductBatch } from '@/types';
 
 // Busca a lista consolidada para a tela principal de estoque
 export async function getInventorySummary(branchId: number) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .rpc('get_branch_inventory_summary', { branch_id_input: branchId });
@@ -18,7 +20,7 @@ export async function getInventorySummary(branchId: number) {
 
 // Busca os lotes de um produto específico (para a tela de detalhes)
 export async function getProductBatches(configId: number) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .rpc('get_product_batches', { config_id_input: configId });
@@ -34,7 +36,7 @@ export async function getProductBatches(configId: number) {
 // ADICIONE ESTA FUNÇÃO:
 // Busca os dados consolidados de um produto específico (Cabeçalho da tela de detalhes)
 export async function getProductConfigDetails(configId: number) {
-    const supabase = supabaseServer();
+    const supabase = await supabaseServer();
   
     const { data, error } = await supabase
       .rpc('get_branch_product_config_details', { config_id_input: configId })

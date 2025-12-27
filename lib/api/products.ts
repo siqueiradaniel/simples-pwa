@@ -1,8 +1,10 @@
+'use server'
+
 import { supabaseServer } from '../supabase/server';
 import { UIProduct } from '@/types';
 
 export async function getProductsForBranch(branchId: number) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .rpc('get_products_for_branch', { bid: branchId });

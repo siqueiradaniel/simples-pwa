@@ -1,9 +1,12 @@
+'use server';
+
 import { supabaseServer } from '../supabase/server';
+import { revalidatePath } from 'next/cache';
 
 // Atualiza o status do pedido para FINALIZADO ou AGUARDANDO PAGAMENTO
 // E vincula o método de pagamento escolhido
 export async function finishOrder(orderId: number, paymentMethod: string, paymentDetails: any) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   // 1. Atualiza o status do pedido
   const { error: orderError } = await supabase
@@ -28,5 +31,6 @@ export async function finishOrder(orderId: number, paymentMethod: string, paymen
   });
   */
 
+  revalidatePath('/'); // Purge cache for the whole app
   return true;
 }

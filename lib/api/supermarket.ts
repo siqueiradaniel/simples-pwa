@@ -1,8 +1,10 @@
+'use server'
+
 import { supabaseServer } from '../supabase/server';
 import { SupermarketWithBranch } from '@/types';
 
 export async function getSupermarketChain(chainId: number) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .rpc('get_supermarket_with_filials', { chain_id_input: chainId });

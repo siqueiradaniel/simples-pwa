@@ -1,9 +1,12 @@
+'use server';
+
 import { supabaseServer } from '../supabase/server';
 import { createSupabaseClient } from '../supabase/client';
 import { OrderForRouting, ActiveRouteSummary } from '@/types';
+import { revalidatePath } from 'next/cache';
 
 export async function getPendingRoutingOrders(branchId: number) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .rpc('get_pending_routing_orders', { branch_id_input: branchId });
@@ -17,7 +20,7 @@ export async function getPendingRoutingOrders(branchId: number) {
 }
 
 export async function getActiveRoutes() {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .rpc('get_active_routes_summary');
@@ -61,12 +64,14 @@ export async function createRoute(orderIds: number[]) {
 
   if (ordersError) throw new Error(`Erro ao atualizar pedidos: ${ordersError.message}`);
 
+  revalidatePath('/routes'); 
+  revalidatePath('/orders');
   return route;
 }
 
 
 export async function getRouteOrders(routeId: number) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .rpc('get_route_details', { route_id_input: routeId });

@@ -1,9 +1,12 @@
+'use server'
+
+import { revalidatePath } from 'next/cache';
 import { supabaseServer } from '../supabase/server';
 import { Address, UserAddress } from '@/types';
 
 // Busca um endereço pelo ID (Para edição)
 export async function getAddressById(addressId: number) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .from('address')
@@ -21,29 +24,33 @@ export async function getAddressById(addressId: number) {
 
 // Salva o endereço físico (Cria ou Atualiza)
 export async function saveAddress(address: Address) {
-  const supabase = supabaseServer();
-
-  // Remove ID se for undefined ou 0 para criar novo
+  const supabase = await supabaseServer();
   const { id, ...addressData } = address;
 
-  let query = supabase.from('address');
+  // 1. Prepare the query (don't await yet)
+  // Logic: If ID exists > Update. Otherwise > Insert.
+  const mutation = (id && id > 0)
+    ? supabase.from('address').update(addressData).eq('id', id).select().single()
+    : supabase.from('address').insert(addressData).select().single();
 
-  if (id && id > 0) {
-    // Atualiza existente
-    const { data, error } = await query.update(addressData).eq('id', id).select().single();
-    if (error) throw new Error(error.message);
-    return data;
-  } else {
-    // Cria novo
-    const { data, error } = await query.insert(addressData).select().single();
-    if (error) throw new Error(error.message);
-    return data;
+  // 2. Execute and wait for result
+  const { data, error } = await mutation;
+
+  if (error) {
+    console.error('saveAddress Error:', error); // Good practice to log it
+    throw new Error(error.message);
   }
+
+  // 3. Revalidate (Clean execution)
+  revalidatePath('/addresses');
+  revalidatePath('/checkout/address');
+
+  return data;
 }
 
 // Vincula endereço ao usuário
 export async function linkAddressToUser(userId: number, addressId: number, label: string, isDefault: boolean) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   if (isDefault) {
     await supabase
@@ -75,11 +82,14 @@ export async function linkAddressToUser(userId: number, addressId: number, label
     });
     if (error) throw new Error(error.message);
   }
+
+  revalidatePath('/addresses');
+  revalidatePath('/checkout/address');
 }
 
 // Busca todos os endereços de um usuário
 export async function getUserAddresses(userId: number) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .from('user_address')
