@@ -12,7 +12,7 @@ export async function finishOrder(orderId: number, paymentMethod: string, paymen
   const { error: orderError } = await supabase
     .from('orders')
     .update({ 
-      status: 'PAID', // Sai de CURRENT para PENDING (Aguardando confirmação do pagamento)
+      status: 'PAID', 
       payment_status: 'PENDING',
       d_at: new Date().toISOString() // Data real da efetivação
     })

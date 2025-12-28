@@ -13,7 +13,7 @@ export default async function CheckoutAddressPage() {
 
   // 2. Busca os endereços do usuário
   const addresses = await getUserAddresses(userId);
-
+  
   // Calcula o total (subtotal + frete - desconto)
   // Assumindo que total_price do pedido já é o final, ou somamos aqui
   // Como syncCart atualiza total_price, usamos ele.

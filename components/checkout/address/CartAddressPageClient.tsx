@@ -25,7 +25,7 @@ export default function CartAddressPageClient({ addresses, orderId, totalPrice }
   const items = useCartStore(state => state.items);
 
   // Seleciona o endereço padrão ou o primeiro da lista
-  const defaultSelection = addresses.find(a => a.is_default)?.id || addresses[0]?.address_id;
+  const defaultSelection = addresses.find(a => a.is_default)?.address_id || addresses[0]?.address_id;
   const [selectedAddressId, setSelectedAddressId] = useState<number | undefined>(defaultSelection);
   const [isSaving, setIsSaving] = useState(false);
 
