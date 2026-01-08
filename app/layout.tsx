@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import BottomNavigationBar from '@/components/home/BottomNavigationBar'
-import CartInitializer from '@/components/CartInitializer' 
 import { Toaster } from 'sonner';
+import AppInitializer from '@/components/AppInitializer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -30,7 +30,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="ClickBeard" />
       </head>
       <body className={`${inter.className} bg-gray-50`}>
-        <CartInitializer />
+        <AppInitializer />
         <main className="pb-20 min-h-screen">
           {children}
         </main>
