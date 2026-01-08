@@ -24,7 +24,7 @@ export default function OrderPageClient({ order, items }: OrderPageClientProps) 
       <div className="max-w-md mx-auto space-y-2 mt-2">
         <OrderMarketInfo 
           name={order.market_name} 
-          logoUrl={order.market_logo} 
+          logo_url={order.market_logo} 
           branchName={order.branch_name} 
         />
 

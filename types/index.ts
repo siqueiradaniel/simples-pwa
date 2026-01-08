@@ -2,7 +2,7 @@ export type SupermarketChain = {
   id: number 
   cnpj: string 
   name: string 
-  logoUrl: string
+  logo_url: string
   deliveryEndTime: number
   minimumOrderValue: number
 }

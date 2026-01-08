@@ -10,7 +10,7 @@ export default function CartInitializer() {
   useEffect(() => {
     if (!initialized.current) {
       // Hardcoded por enquanto, depois pode vir de props passadas pelo Server Component do layout
-      const userId = 1;
+      const userId = 'ca463a4e-ec85-4052-991f-dd3af9406693';;
       const branchId = 1;
       
       initializeCart(userId, branchId);

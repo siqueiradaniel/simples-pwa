@@ -5,7 +5,7 @@ import { getOrCreateCartId } from "@/lib/api/cart";
 export const dynamic = 'force-dynamic';
 
 export default async function CartPage() {
-  const userId = 1; // Fixo conforme pedido
+  const userId = 'ca463a4e-ec85-4052-991f-dd3af9406693';; // Fixo conforme pedido
   const branchId = 1; // Fixo ou viria de contexto/cookie da filial selecionada
   const MINIMUM_ORDER_VALUE = 80; // Fixo R$ 80,00 virá do supermarket
 

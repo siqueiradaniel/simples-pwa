@@ -3,7 +3,7 @@ import CartPaymentPageClient from "@/components/checkout/payment/CartPaymentPage
 import { getOrCreateCartId, getCurrentOrder, getCartItems } from "@/lib/api/cart";
 
 export default async function CheckoutPaymentPage() {
-  const userId = 1; // Fixo
+  const userId = 'ca463a4e-ec85-4052-991f-dd3af9406693';; // Fixo
   const branchId = 1; // Fixo
 
   // Busca dados do pedido atual

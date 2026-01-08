@@ -5,7 +5,7 @@ import { OrderWithUser } from "@/types";
 
 export default async function AccountPage() {
   const branchId = 1; // Fixo por enquanto
-  const userId = 1; // User ID fixo por enquanto
+  const userId = 'ca463a4e-ec85-4052-991f-dd3af9406693';
   
   // Busca todos os pedidos da filial
   const allOrders = await getOrdersWithUsers(branchId);

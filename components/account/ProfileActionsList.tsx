@@ -4,7 +4,7 @@ import { Bell, User, MapPin, CreditCard, Store, LogOut, ChevronRight, LucideIcon
 import Link from "next/link";
 
 interface ProfileActionsListProps {
-  userId?: number;
+  userId?: string;
 }
 
 interface ActionItem {

@@ -7,79 +7,89 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "13.0.5"
-  }
   public: {
     Tables: {
       address: {
         Row: {
-          cep: string
-          city: string
-          complement: string | null
           id: number
+          street: string
+          number: string | null
+          neighborhood: string
+          city: string
+          state: string
+          cep: string
+          complement: string | null
+          reference: string | null
           latitude: number | null
           longitude: number | null
-          neighborhood: string
-          number: number | null
-          reference: string | null
-          state: string
-          street: string
+          created_at: string
         }
         Insert: {
-          cep: string
-          city: string
-          complement?: string | null
           id?: number
+          street: string
+          number?: string | null
+          neighborhood: string
+          city: string
+          state: string
+          cep: string
+          complement?: string | null
+          reference?: string | null
           latitude?: number | null
           longitude?: number | null
-          neighborhood: string
-          number?: number | null
-          reference?: string | null
-          state: string
-          street: string
+          created_at?: string
         }
         Update: {
-          cep?: string
-          city?: string
-          complement?: string | null
           id?: number
+          street?: string
+          number?: string | null
+          neighborhood?: string
+          city?: string
+          state?: string
+          cep?: string
+          complement?: string | null
+          reference?: string | null
           latitude?: number | null
           longitude?: number | null
-          neighborhood?: string
-          number?: number | null
-          reference?: string | null
-          state?: string
-          street?: string
+          created_at?: string
         }
         Relationships: []
       }
       branch: {
         Row: {
-          address_id: number | null
-          email: string
           id: number
-          name: string
-          phone_number: string
+          public_id: string
           supermarket_chain_id: number | null
+          address_id: number | null
+          name: string
+          email: string | null
+          phone_number: string | null
+          is_active: boolean
+          created_at: string
+          updated_at: string
         }
         Insert: {
-          address_id?: number | null
-          email: string
           id?: number
-          name: string
-          phone_number: string
+          public_id?: string
           supermarket_chain_id?: number | null
+          address_id?: number | null
+          name: string
+          email?: string | null
+          phone_number?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
         }
         Update: {
-          address_id?: number | null
-          email?: string
           id?: number
-          name?: string
-          phone_number?: string
+          public_id?: string
           supermarket_chain_id?: number | null
+          address_id?: number | null
+          name?: string
+          email?: string | null
+          phone_number?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -95,103 +105,93 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "supermarket_chain"
             referencedColumns: ["id"]
-          },
+          }
         ]
       }
-      branch_product: {
+      branch_product_config: {
         Row: {
-          branch_id: number | null
-          buy_price: number
-          current_earn: number | null
-          expiration_date: string
           id: number
-          initial_quantity: number
+          branch_id: number | null
+          product_id: number | null
+          sell_price: number
+          min_stock_limit: number | null
           is_available: boolean | null
           is_promotion: boolean | null
-          min_quantity: number
-          product_id: number | null
-          profit: number
-          sell_price: number
-          stock_level: Database["public"]["Enums"]["stock_level"] | null
-          stock_quantity: number
-          total_cost: number | null
-          total_to_earn: number | null
-          wanted_quantity: number
+          stock_quantity: number | null
+          created_at: string
+          updated_at: string
         }
         Insert: {
-          branch_id?: number | null
-          buy_price: number
-          current_earn?: number | null
-          expiration_date: string
           id?: number
-          initial_quantity: number
+          branch_id?: number | null
+          product_id?: number | null
+          sell_price?: number
+          min_stock_limit?: number | null
           is_available?: boolean | null
           is_promotion?: boolean | null
-          min_quantity: number
-          product_id?: number | null
-          profit: number
-          sell_price: number
-          stock_level?: Database["public"]["Enums"]["stock_level"] | null
-          stock_quantity: number
-          total_cost?: number | null
-          total_to_earn?: number | null
-          wanted_quantity: number
+          stock_quantity?: number | null
+          created_at?: string
+          updated_at?: string
         }
         Update: {
-          branch_id?: number | null
-          buy_price?: number
-          current_earn?: number | null
-          expiration_date?: string
           id?: number
-          initial_quantity?: number
+          branch_id?: number | null
+          product_id?: number | null
+          sell_price?: number
+          min_stock_limit?: number | null
           is_available?: boolean | null
           is_promotion?: boolean | null
-          min_quantity?: number
-          product_id?: number | null
-          profit?: number
-          sell_price?: number
-          stock_level?: Database["public"]["Enums"]["stock_level"] | null
-          stock_quantity?: number
-          total_cost?: number | null
-          total_to_earn?: number | null
-          wanted_quantity?: number
+          stock_quantity?: number | null
+          created_at?: string
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "branch_product_branch_id_fkey"
+            foreignKeyName: "branch_product_config_branch_id_fkey"
             columns: ["branch_id"]
             isOneToOne: false
             referencedRelation: "branch"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "branch_product_product_id_fkey"
+            foreignKeyName: "branch_product_config_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "product"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "branch_product_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "product_with_inventory"
-            referencedColumns: ["product_id"]
-          },
+          }
         ]
       }
       category: {
         Row: {
           id: number
           title: string
+          slug: string | null
+          description: string | null
+          icon: string | null
+          display_order: number | null
+          is_active: boolean | null
+          created_at: string
         }
         Insert: {
           id?: number
           title: string
+          slug?: never
+          description?: string | null
+          icon?: string | null
+          display_order?: number | null
+          is_active?: boolean | null
+          created_at?: string
         }
         Update: {
           id?: number
           title?: string
+          slug?: never
+          description?: string | null
+          icon?: string | null
+          display_order?: number | null
+          is_active?: boolean | null
+          created_at?: string
         }
         Relationships: []
       }
@@ -201,24 +201,24 @@ export type Database = {
           order_id: number | null
           product_id: number | null
           qtd: number
-          subtotal: number
           unit_price: number
+          subtotal: number
         }
         Insert: {
           id?: number
           order_id?: number | null
           product_id?: number | null
           qtd: number
-          subtotal: number
           unit_price: number
+          subtotal: number
         }
         Update: {
           id?: number
           order_id?: number | null
           product_id?: number | null
           qtd?: number
-          subtotal?: number
           unit_price?: number
+          subtotal?: number
         }
         Relationships: [
           {
@@ -234,64 +234,57 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "product"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "order_product_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "product_with_inventory"
-            referencedColumns: ["product_id"]
-          },
+          }
         ]
       }
       orders: {
         Row: {
+          id: number
+          user_id: string
+          branch_id: number
           address_id: number | null
-          branch_id: number | null
-          d_at: string
+          route_id: number | null
+          status: Database["public"]["Enums"]["order_status"] | null
+          payment_status: Database["public"]["Enums"]["payment_status"] | null
+          order_number: number | null
+          total_price: number | null
           delivery_fee: number | null
           discount: number | null
+          created_at: string
+          updated_at: string
           finished_at: string | null
-          id: number
-          order_number: number
-          payment_status: Database["public"]["Enums"]["payment_status"]
-          qtd_compras: number | null
-          route_id: number | null
-          status: Database["public"]["Enums"]["order_status"]
-          total_price: number
-          user_id: number | null
         }
         Insert: {
+          id?: number
+          user_id: string
+          branch_id: number
           address_id?: number | null
-          branch_id?: number | null
-          d_at: string
+          route_id?: number | null
+          status?: Database["public"]["Enums"]["order_status"] | null
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          order_number?: number | null
+          total_price?: number | null
           delivery_fee?: number | null
           discount?: number | null
+          created_at?: string
+          updated_at?: string
           finished_at?: string | null
-          id?: number
-          order_number: number
-          payment_status: Database["public"]["Enums"]["payment_status"]
-          qtd_compras?: number | null
-          route_id?: number | null
-          status: Database["public"]["Enums"]["order_status"]
-          total_price: number
-          user_id?: number | null
         }
         Update: {
+          id?: number
+          user_id?: string
+          branch_id?: number
           address_id?: number | null
-          branch_id?: number | null
-          d_at?: string
+          route_id?: number | null
+          status?: Database["public"]["Enums"]["order_status"] | null
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          order_number?: number | null
+          total_price?: number | null
           delivery_fee?: number | null
           discount?: number | null
+          created_at?: string
+          updated_at?: string
           finished_at?: string | null
-          id?: number
-          order_number?: number
-          payment_status?: Database["public"]["Enums"]["payment_status"]
-          qtd_compras?: number | null
-          route_id?: number | null
-          status?: Database["public"]["Enums"]["order_status"]
-          total_price?: number
-          user_id?: number | null
         }
         Relationships: [
           {
@@ -319,117 +312,50 @@ export type Database = {
             foreignKeyName: "orders_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
-          },
-        ]
-      }
-      payment: {
-        Row: {
-          amount: number
-          canceled_at: string | null
-          confirmed_at: string | null
-          d_at: string
-          id: number
-          order_id: number | null
-          status: Database["public"]["Enums"]["payment_status"]
-        }
-        Insert: {
-          amount: number
-          canceled_at?: string | null
-          confirmed_at?: string | null
-          d_at: string
-          id?: number
-          order_id?: number | null
-          status: Database["public"]["Enums"]["payment_status"]
-        }
-        Update: {
-          amount?: number
-          canceled_at?: string | null
-          confirmed_at?: string | null
-          d_at?: string
-          id?: number
-          order_id?: number | null
-          status?: Database["public"]["Enums"]["payment_status"]
-        }
-        Relationships: [
-          {
-            foreignKeyName: "payment_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: true
-            referencedRelation: "orders"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      payment_method: {
-        Row: {
-          active: boolean | null
-          code: string
-          config: Json | null
-          display_name: string
-          id: number
-          payment_id: number | null
-        }
-        Insert: {
-          active?: boolean | null
-          code: string
-          config?: Json | null
-          display_name: string
-          id?: number
-          payment_id?: number | null
-        }
-        Update: {
-          active?: boolean | null
-          code?: string
-          config?: Json | null
-          display_name?: string
-          id?: number
-          payment_id?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "payment_method_payment_id_fkey"
-            columns: ["payment_id"]
-            isOneToOne: false
-            referencedRelation: "payment"
-            referencedColumns: ["id"]
-          },
+          }
         ]
       }
       product: {
         Row: {
-          brand: string | null
-          category_id: number | null
-          code: string
-          description: string
           id: number
-          image_url: string | null
+          category_id: number | null
           name: string
-          unit: string
-          units_sold: number | null
+          description: string | null
+          image_url: string | null
+          unit: string | null
+          code: string | null
+          brand: string | null
+          is_active: boolean | null
+          created_at: string
+          updated_at: string
         }
         Insert: {
-          brand?: string | null
-          category_id?: number | null
-          code: string
-          description: string
           id?: number
-          image_url?: string | null
+          category_id?: number | null
           name: string
-          unit: string
-          units_sold?: number | null
+          description?: string | null
+          image_url?: string | null
+          unit?: string | null
+          code?: string | null
+          brand?: string | null
+          is_active?: boolean | null
+          created_at?: string
+          updated_at?: string
         }
         Update: {
-          brand?: string | null
-          category_id?: number | null
-          code?: string
-          description?: string
           id?: number
-          image_url?: string | null
+          category_id?: number | null
           name?: string
-          unit?: string
-          units_sold?: number | null
+          description?: string | null
+          image_url?: string | null
+          unit?: string | null
+          code?: string | null
+          brand?: string | null
+          is_active?: boolean | null
+          created_at?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -438,78 +364,223 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "category"
             referencedColumns: ["id"]
+          }
+        ]
+      }
+      product_batch: {
+        Row: {
+          id: number
+          branch_product_config_id: number | null
+          batch_code: string | null
+          quantity: number
+          initial_quantity: number
+          cost_price: number
+          expiration_date: string | null
+          arrival_date: string | null
+          supplier: string | null
+          status: Database["public"]["Enums"]["batch_status"] | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          branch_product_config_id?: number | null
+          batch_code?: string | null
+          quantity?: number
+          initial_quantity: number
+          cost_price: number
+          expiration_date?: string | null
+          arrival_date?: string | null
+          supplier?: string | null
+          status?: Database["public"]["Enums"]["batch_status"] | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          branch_product_config_id?: number | null
+          batch_code?: string | null
+          quantity?: number
+          initial_quantity?: number
+          cost_price?: number
+          expiration_date?: string | null
+          arrival_date?: string | null
+          supplier?: string | null
+          status?: Database["public"]["Enums"]["batch_status"] | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_batch_branch_product_config_id_fkey"
+            columns: ["branch_product_config_id"]
+            isOneToOne: false
+            referencedRelation: "branch_product_config"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      profiles: {
+        Row: {
+          id: string
+          supermarket_chain_id: number | null
+          full_name: string
+          phone_number: string | null
+          cpf: string | null
+          birth_date: string | null
+          user_role: Database["public"]["Enums"]["user_role"] | null
+          is_active: boolean | null
+          is_blocked: boolean | null
+          last_login: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          supermarket_chain_id?: number | null
+          full_name: string
+          phone_number?: string | null
+          cpf?: string | null
+          birth_date?: string | null
+          user_role?: Database["public"]["Enums"]["user_role"] | null
+          is_active?: boolean | null
+          is_blocked?: boolean | null
+          last_login?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          supermarket_chain_id?: number | null
+          full_name?: string
+          phone_number?: string | null
+          cpf?: string | null
+          birth_date?: string | null
+          user_role?: Database["public"]["Enums"]["user_role"] | null
+          is_active?: boolean | null
+          is_blocked?: boolean | null
+          last_login?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "profiles_supermarket_chain_id_fkey"
+            columns: ["supermarket_chain_id"]
+            isOneToOne: false
+            referencedRelation: "supermarket_chain"
+            referencedColumns: ["id"]
+          }
         ]
       }
       route: {
         Row: {
-          actual_time: number | null
-          estimated_distance: number
-          estimated_time: number
           id: number
+          branch_id: number | null
+          driver_name: string | null
+          estimated_time: number | null
+          estimated_distance: number | null
+          actual_time: number | null
+          status: string | null
+          created_at: string
+          completed_at: string | null
         }
         Insert: {
-          actual_time?: number | null
-          estimated_distance: number
-          estimated_time: number
           id?: number
+          branch_id?: number | null
+          driver_name?: string | null
+          estimated_time?: number | null
+          estimated_distance?: number | null
+          actual_time?: number | null
+          status?: string | null
+          created_at?: string
+          completed_at?: string | null
         }
         Update: {
-          actual_time?: number | null
-          estimated_distance?: number
-          estimated_time?: number
           id?: number
+          branch_id?: number | null
+          driver_name?: string | null
+          estimated_time?: number | null
+          estimated_distance?: number | null
+          actual_time?: number | null
+          status?: string | null
+          created_at?: string
+          completed_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "route_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branch"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       supermarket_chain: {
         Row: {
-          cnpj: string
-          deliveryEndTime: number | null
           id: number
-          logoUrl: string | null
-          minimumOrderValue: number | null
           name: string
+          cnpj: string
+          logo_url: string | null
+          minimum_order_value: number | null
+          delivery_end_time: number | null
+          created_at: string
+          updated_at: string
         }
         Insert: {
-          cnpj: string
-          deliveryEndTime?: number | null
           id?: number
-          logoUrl?: string | null
-          minimumOrderValue?: number | null
           name: string
+          cnpj: string
+          logo_url?: string | null
+          minimum_order_value?: number | null
+          delivery_end_time?: number | null
+          created_at?: string
+          updated_at?: string
         }
         Update: {
-          cnpj?: string
-          deliveryEndTime?: number | null
           id?: number
-          logoUrl?: string | null
-          minimumOrderValue?: number | null
           name?: string
+          cnpj?: string
+          logo_url?: string | null
+          minimum_order_value?: number | null
+          delivery_end_time?: number | null
+          created_at?: string
+          updated_at?: string
         }
         Relationships: []
       }
       user_address: {
         Row: {
-          address_id: number | null
           id: number
-          is_default: boolean | null
+          user_id: string | null
+          address_id: number | null
           label: string
-          user_id: number | null
+          is_default: boolean | null
+          created_at: string
         }
         Insert: {
-          address_id?: number | null
           id?: number
-          is_default?: boolean | null
+          user_id?: string | null
+          address_id?: number | null
           label: string
-          user_id?: number | null
+          is_default?: boolean | null
+          created_at?: string
         }
         Update: {
-          address_id?: number | null
           id?: number
-          is_default?: boolean | null
+          user_id?: string | null
+          address_id?: number | null
           label?: string
-          user_id?: number | null
+          is_default?: boolean | null
+          created_at?: string
         }
         Relationships: [
           {
@@ -523,155 +594,227 @@ export type Database = {
             foreignKeyName: "user_address_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
-          },
-        ]
-      }
-      user_credentials: {
-        Row: {
-          email: string
-          enabled: boolean
-          id: number
-          password: string
-        }
-        Insert: {
-          email: string
-          enabled?: boolean
-          id?: number
-          password: string
-        }
-        Update: {
-          email?: string
-          enabled?: boolean
-          id?: number
-          password?: string
-        }
-        Relationships: []
-      }
-      users: {
-        Row: {
-          birth_date: string
-          cpf: string
-          email: string
-          full_name: string
-          id: number
-          is_active: boolean | null
-          is_blocked: boolean | null
-          last_login: string | null
-          phone_number: string
-          registered: boolean | null
-          supermarket_chain_id: number | null
-          user_role: Database["public"]["Enums"]["user_role"]
-        }
-        Insert: {
-          birth_date: string
-          cpf: string
-          email: string
-          full_name: string
-          id?: number
-          is_active?: boolean | null
-          is_blocked?: boolean | null
-          last_login?: string | null
-          phone_number: string
-          registered?: boolean | null
-          supermarket_chain_id?: number | null
-          user_role?: Database["public"]["Enums"]["user_role"]
-        }
-        Update: {
-          birth_date?: string
-          cpf?: string
-          email?: string
-          full_name?: string
-          id?: number
-          is_active?: boolean | null
-          is_blocked?: boolean | null
-          last_login?: string | null
-          phone_number?: string
-          registered?: boolean | null
-          supermarket_chain_id?: number | null
-          user_role?: Database["public"]["Enums"]["user_role"]
-        }
-        Relationships: [
-          {
-            foreignKeyName: "users_supermarket_chain_id_fkey"
-            columns: ["supermarket_chain_id"]
-            isOneToOne: false
-            referencedRelation: "supermarket_chain"
-            referencedColumns: ["id"]
-          },
+          }
         ]
       }
     }
     Views: {
-      product_with_inventory: {
-        Row: {
-          branch_id: number | null
-          branch_product_id: number | null
-          brand: string | null
-          category_id: number | null
-          category_title: string | null
-          code: string | null
-          description: string | null
-          image_url: string | null
-          is_available: boolean | null
-          is_promotion: boolean | null
-          name: string | null
-          product_id: number | null
-          sell_price: number | null
-          stock_level: Database["public"]["Enums"]["stock_level"] | null
-          stock_quantity: number | null
-          unit: string | null
-          units_sold: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "branch_product_branch_id_fkey"
-            columns: ["branch_id"]
-            isOneToOne: false
-            referencedRelation: "branch"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "product_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "category"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
+      [_ in never]: never
     }
     Functions: {
       get_products_for_branch: {
         Args: { bid: number }
         Returns: {
-          branch_id: number | null
-          branch_product_id: number | null
-          brand: string | null
-          category_id: number | null
-          category_title: string | null
-          code: string | null
-          description: string | null
-          image_url: string | null
-          is_available: boolean | null
-          is_promotion: boolean | null
-          name: string | null
-          product_id: number | null
-          sell_price: number | null
-          stock_level: Database["public"]["Enums"]["stock_level"] | null
-          stock_quantity: number | null
-          unit: string | null
-          units_sold: number | null
+          product_id: number
+          name: string
+          unit: string
+          sell_price: number
+          category_title: string
+          category_id: number
+          image_url: string
+          is_available: boolean
+          stock_quantity: number
         }[]
-        SetofOptions: {
-          from: "*"
-          to: "product_with_inventory"
-          isOneToOne: false
-          isSetofReturn: true
-        }
       }
-      get_supermarkets_with_users: { Args: never; Returns: Json }
+      get_orders_with_users: {
+        Args: { bid: number }
+        Returns: {
+          id: number
+          user_id: string
+          fullName: string
+          phoneNumber: string
+          status: Database["public"]["Enums"]["order_status"]
+          totalPrice: number
+          dAt: string
+        }[]
+      }
+      get_order_details_by_id: {
+        Args: { order_id_input: number }
+        Returns: {
+          order_id: number
+          status: Database["public"]["Enums"]["order_status"]
+          payment_status: Database["public"]["Enums"]["payment_status"]
+          order_number: number
+          created_at: string
+          finished_at: string
+          total_price: number
+          delivery_fee: number
+          discount: number
+          customer_name: string
+          customer_phone: string
+          street: string
+          address_number: string
+          neighborhood: string
+          city: string
+          state: string
+          complement: string
+          reference: string
+          market_name: string
+          market_logo: string
+          branch_name: string
+        }[]
+      }
+      get_order_items_by_id: {
+        Args: { order_id_input: number }
+        Returns: {
+          order_id: number
+          product_id: number
+          quantity: number
+          unit_price: number
+          subtotal: number
+          product_name: string
+          product_image: string
+          product_unit: string
+        }[]
+      }
+      get_supermarket_with_filials: {
+        Args: { chain_id_input: number }
+        Returns: {
+          chain_id: number
+          chain_name: string
+          chain_logo: string
+          chain_cnpj: string
+          branch_id: number
+          branch_name: string
+          branch_phone: string
+          branch_email: string
+          street: string
+          number: string
+          neighborhood: string
+          city: string
+          state: string
+          cep: string
+        }[]
+      }
+      get_branch_inventory_summary: {
+        Args: { branch_id_input: number }
+        Returns: {
+          config_id: number
+          branch_id: number
+          product_id: number
+          sell_price: number
+          min_stock_limit: number
+          is_available: boolean
+          product_name: string
+          product_code: string
+          image_url: string
+          unit: string
+          category_title: string
+          total_stock: number
+          next_expiration: string
+          average_cost: number
+        }[]
+      }
+      get_product_batches: {
+        Args: { config_id_input: number }
+        Returns: {
+          id: number
+          branch_product_config_id: number
+          batch_code: string
+          quantity: number
+          initial_quantity: number
+          cost_price: number
+          expiration_date: string
+          arrival_date: string
+          supplier: string
+          status: Database["public"]["Enums"]["batch_status"]
+        }[]
+      }
+      get_supermarket_users: {
+        Args: { chain_id_input: number }
+        Returns: {
+          id: string
+          full_name: string
+          email: string
+          phone_number: string
+          user_role: Database["public"]["Enums"]["user_role"]
+          is_active: boolean
+          is_blocked: boolean
+          last_login: string
+          supermarket_chain_id: number
+          created_at: string
+        }[]
+      }
+      get_supermarket_products: {
+        Args: { chain_id_input: number }
+        Returns: {
+          product_id: number
+          code: string
+          name: string
+          description: string
+          image_url: string
+          unit: string
+          units_sold: number
+          category_title: string
+          total_stock_quantity: number
+          min_price: number
+          max_price: number
+        }[]
+      }
+      get_pending_routing_orders: {
+        Args: { branch_id_input: number }
+        Returns: {
+          order_id: number
+          order_number: number
+          status: Database["public"]["Enums"]["order_status"]
+          total_price: number
+          created_at: string
+          branch_id: number
+          customer_name: string
+          street: string
+          address_number: string
+          neighborhood: string
+          city: string
+          latitude: number
+          longitude: number
+        }[]
+      }
+      get_active_routes_summary: {
+        Args: Record<string, never>
+        Returns: {
+          route_id: number
+          estimated_time: number
+          estimated_distance: number
+          actual_time: number
+          deliveries_count: number
+          route_status: string
+          neighborhoods: string
+        }[]
+      }
+      get_route_details: {
+        Args: { route_id_input: number }
+        Returns: {
+          order_id: number
+          order_number: number
+          status: Database["public"]["Enums"]["order_status"]
+          total_price: number
+          created_at: string
+          branch_id: number
+          customer_name: string
+          street: string
+          address_number: string
+          neighborhood: string
+          city: string
+          latitude: number
+          longitude: number
+        }[]
+      }
+      get_or_create_current_order: {
+        Args: {
+          user_id_input: string
+          branch_id_input: number
+        }
+        Returns: number
+      }
+      sync_cart: {
+        Args: {
+          order_id_input: number
+          items_input: Json
+        }
+        Returns: void
+      }
       update_cart_item_quantity: {
         Args: {
           order_id_input: number
@@ -680,174 +823,20 @@ export type Database = {
         }
         Returns: void
       }
-      get_or_create_current_order: {
-        Args: {
-          user_id_input: number
-          branch_id_input: number
-        }
-        Returns: number
-      }
-      get_order_items_by_id: {
-        Args: {
-          order_id_input: number
-        }
-        Returns: {
-          order_id: number
-          product_id: number
-          quantity: number
-          unit_price: number
-          subtotal: number
-          product_name: string
-          product_image: string | null
-          product_unit: string
-        }[]
-      }
-      sync_cart: {
-        Args: {
-          order_id_input: number
-          items_input: { product_id: number; quantity: number }[]
-        }
-        Returns: void
-      }
     }
     Enums: {
-      order_status: "PENDING" | "PAID" | "CANCELED" | "FINISHED" | "CURRENT"
-      payment_status: "PENDING" | "CONFIRMED" | "CANCELED"
-      product_category: "FOOD" | "DRINKS" | "CLEANING" | "HYGIENE" | "OTHER"
-      stock_level: "LOW" | "MEDIUM" | "HIGH"
-      user_role: "ADMIN" | "CUSTOMER" | "MANAGER"
-    }
-    CompositeTypes: {
-      [_ in never]: never
+      batch_status: "ACTIVE" | "CONSUMED" | "EXPIRED"
+      order_status: "CURRENT" | "PAID" | "EM_PRODUCAO" | "A_CAMINHO" | "DELIVERED" | "FINISHED" | "CANCELED"
+      payment_status: "PENDING" | "CONFIRMED" | "CANCELED" | "REFUNDED"
+      user_role: "ADMIN" | "MANAGER" | "STAFF" | "CUSTOMER"
     }
   }
 }
-
-type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
-
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
-> = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
-    }
-    ? R
-    : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])
-    ? (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
-        Row: infer R
-      }
-      ? R
-      : never
-    : never
-
-export type TablesInsert<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
-> = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
-    }
-    ? I
-    : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Insert: infer I
-      }
-      ? I
-      : never
-    : never
-
-export type TablesUpdate<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
-> = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
-    }
-    ? U
-    : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Update: infer U
-      }
-      ? U
-      : never
-    : never
+  T extends keyof Database['public']['Tables']
+> = Database['public']['Tables'][T]['Row']
 
 export type Enums<
-  DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema["Enums"]
-    | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
-> = DefaultSchemaEnumNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
-    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
-    : never
-
-export type CompositeTypes<
-  PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
-> = PublicCompositeTypeNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
-    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-    : never
-
-export const Constants = {
-  public: {
-    Enums: {
-      order_status: ["PENDING", "PAID", "CANCELED", "FINISHED", "CURRENT"],
-      payment_status: ["PENDING", "CONFIRMED", "CANCELED"],
-      product_category: ["FOOD", "DRINKS", "CLEANING", "HYGIENE", "OTHER"],
-      stock_level: ["LOW", "MEDIUM", "HIGH"],
-      user_role: ["ADMIN", "CUSTOMER", "MANAGER"],
-    },
-  },
-} as const
+  T extends keyof Database['public']['Enums']
+> = Database['public']['Enums'][T]

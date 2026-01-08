@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 
 interface ChainHeaderProps {
   name: string;
-  logoUrl: string;
+  logo_url: string;
   cnpj: string;
   branchCount: number;
 }
 
-export default function ChainHeader({ name, logoUrl, cnpj, branchCount }: ChainHeaderProps) {
+export default function ChainHeader({ name, logo_url, cnpj, branchCount }: ChainHeaderProps) {
   const router = useRouter();
 
   return (
@@ -29,7 +29,7 @@ export default function ChainHeader({ name, logoUrl, cnpj, branchCount }: ChainH
       <div className="px-6 pb-6 pt-2 flex items-center gap-5">
         <div className="w-16 h-16 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
           <img 
-            src={logoUrl} 
+            src={logo_url} 
             alt={name} 
             className="w-full h-full object-cover"
             onError={(e) => {

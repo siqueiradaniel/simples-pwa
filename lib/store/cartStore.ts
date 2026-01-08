@@ -10,7 +10,7 @@ interface CartState {
   isLoading: boolean;
   
   // Actions
-  initializeCart: (userId: number, branchId: number) => Promise<void>;
+  initializeCart: (userId: string, branchId: number) => Promise<void>;
   addItem: (product: any) => Promise<void>;
   removeItem: (productId: number) => Promise<void>;
   updateItemQuantity: (productId: number, quantity: number) => Promise<void>;
@@ -22,7 +22,7 @@ export const useCartStore = create<CartState>((set, get) => ({
   orderId: null,
   isLoading: false,
 
-  initializeCart: async (userId: number, branchId: number) => {
+  initializeCart: async (userId: string, branchId: number) => {
     // Evita inicializar se já estiver carregado ou carregando
     if (get().orderId || get().isLoading) return;
 

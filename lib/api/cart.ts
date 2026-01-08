@@ -6,7 +6,7 @@ import { CartItem, CartItemInput } from '@/types';
 import { revalidatePath } from 'next/cache';
 
 // Obtém o ID do pedido 'CURRENT' (cria se não existir)
-export async function getOrCreateCartId(userId: number, branchId: number) {
+export async function getOrCreateCartId(userId: string, branchId: number) {
   const supabase = await supabaseServer();
   
   const { data, error } = await supabase

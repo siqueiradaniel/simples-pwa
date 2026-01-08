@@ -14,7 +14,7 @@ export type UserProfile = {
 };
 
 // Busca dados do usuário pelo ID
-export async function getUserById(userId: number) {
+export async function getUserById(userId: string) {
   const supabase = await supabaseServer();
 
   const { data, error } = await supabase

@@ -4,7 +4,7 @@ import { getUserAddresses } from "@/lib/api/address";
 import CartAddressPageClient from "@/components/checkout/address/CartAddressPageClient";
 
 export default async function CheckoutAddressPage() {
-  const userId = 1; // Fixo por enquanto
+  const userId = 'ca463a4e-ec85-4052-991f-dd3af9406693';; // Fixo por enquanto
   const branchId = 1; // Fixo
 
   // 1. Busca o pedido atual (Carrinho)

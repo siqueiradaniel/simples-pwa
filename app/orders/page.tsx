@@ -4,7 +4,7 @@ import { OrderWithUser } from "@/types";
 
 export default async function OrdersPage() {
   const branchId = 1; // Fixo por enquanto
-  const userId = 1; // User ID fixo
+  const userId = 'ca463a4e-ec85-4052-991f-dd3af9406693';; // User ID fixo
   
   // Busca todos e filtra pelo usuário
   const allOrders = await getOrdersWithUsers(branchId);

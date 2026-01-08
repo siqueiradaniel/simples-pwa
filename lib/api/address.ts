@@ -49,7 +49,7 @@ export async function saveAddress(address: Address) {
 }
 
 // Vincula endereço ao usuário
-export async function linkAddressToUser(userId: number, addressId: number, label: string, isDefault: boolean) {
+export async function linkAddressToUser(userId: string, addressId: number, label: string, isDefault: boolean) {
   const supabase = await supabaseServer();
 
   if (isDefault) {
@@ -88,7 +88,7 @@ export async function linkAddressToUser(userId: number, addressId: number, label
 }
 
 // Busca todos os endereços de um usuário
-export async function getUserAddresses(userId: number) {
+export async function getUserAddresses(userId: string) {
   const supabase = await supabaseServer();
 
   const { data, error } = await supabase

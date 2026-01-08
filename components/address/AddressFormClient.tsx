@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 interface AddressFormClientProps {
   initialData?: Address; // Opcional, vem preenchido na edição
-  userId: number; // Passado pelo Server Component
+  userId: string; // Passado pelo Server Component
 }
 
 export default function AddressFormClient({ initialData, userId }: AddressFormClientProps) {

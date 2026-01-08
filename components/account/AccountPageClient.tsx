@@ -6,7 +6,7 @@ import { OrderWithUser } from "@/types";
 
 interface AccountPageClientProps {
   orders: OrderWithUser[]; // Mantemos a prop se quiser usar para exibir "Último pedido" ou estatísticas, senão pode remover
-  userId: number;
+  userId: string;
 }
 
 export default function AccountPageClient({ orders, userId }: AccountPageClientProps) {

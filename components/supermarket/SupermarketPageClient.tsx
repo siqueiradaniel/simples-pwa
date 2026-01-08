@@ -43,7 +43,7 @@ export default function SupermarketPageClient({ data }: { data: SupermarketWithB
     <div className="min-h-screen bg-gray-50/50 font-sans">
       <ChainHeader 
         name={chainInfo.chain_name}
-        logoUrl={chainInfo.chain_logo}
+        logo_url={chainInfo.chain_logo}
         cnpj={chainInfo.chain_cnpj}
         branchCount={data.length}
       />

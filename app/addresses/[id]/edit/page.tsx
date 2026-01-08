@@ -8,7 +8,7 @@ interface PageProps {
 
 export default async function EditAddressPage({ params }: PageProps) {
   const { id } = await params;
-  const userId = 1; // Fixo por enquanto
+  const userId = 'ca463a4e-ec85-4052-991f-dd3af9406693';; // Fixo por enquanto
 
   // Busca os dados no servidor antes de renderizar
   const address = await getAddressById(Number(id));

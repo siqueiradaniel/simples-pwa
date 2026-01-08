@@ -8,7 +8,7 @@ const HomeHeader = () => {
     id: 1,
     cnpj: '12.345.678/0001-90',
     name: 'Ideal Supermercado',
-    logoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrQ43uI7GMUYk4kBWt6ReJaLOPNEADvfRBYg&s',
+    logo_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrQ43uI7GMUYk4kBWt6ReJaLOPNEADvfRBYg&s',
     deliveryEndTime: 18, // Mudado para 18h para exemplo
     minimumOrderValue: 80,
   }
@@ -34,7 +34,7 @@ const HomeHeader = () => {
           <div className='bg-white p-1 rounded-2xl shadow-lg'>
              <img 
               className='rounded-xl object-cover h-14 w-14' 
-              src={supermarket.logoUrl} 
+              src={supermarket.logo_url} 
               alt="Logo"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = 'https://placehold.co/80x80?text=Logo';
