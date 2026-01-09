@@ -1,35 +1,44 @@
 'use server';
 
 import { supabaseServer } from '../supabase/server';
-import { createSupabaseClient } from '../supabase/client'; // Client-side para interações do usuário
+import { createSupabaseClient } from '../supabase/client'; 
 import { CartItem, CartItemInput } from '@/types';
 import { revalidatePath } from 'next/cache';
 
-// Obtém o ID do pedido 'CURRENT' (cria se não existir)
+// ==========================================
+// CART MANAGEMENT (CURRENT ORDER)
+// ==========================================
+
+// Get current cart ID or create a new one
 export async function getOrCreateCartId(userId: string, branchId: number) {
   const supabase = await supabaseServer();
   
   const { data, error } = await supabase
-    .rpc('get_or_create_current_order', { user_id_input: userId, branch_id_input: branchId });
+    .rpc('get_or_create_current_order', { 
+      user_id_input: userId, 
+      branch_id_input: branchId 
+    });
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    console.error('[getOrCreateCartId] Error:', error.message);
+    throw new Error(error.message);
+  }
   return data as number;
 }
 
-// Carrega os itens do carrinho atual
+// Get items for a specific cart/order
 export async function getCartItems(orderId: number) {
   const supabase = await supabaseServer();
 
-  // Reusando a view de itens que já criamos para Orders
   const { data, error } = await supabase
     .rpc('get_order_items_by_id', { order_id_input: orderId });
 
   if (error) {
-    console.error('getCartItems error:', error);
+    console.error('[getCartItems] Error:', error);
     return [];
   }
 
-  // Mapeia para o tipo CartItem amigável
+  // Map RPC result to CartItem type
   return (data as any[]).map(item => ({
     product_id: item.product_id,
     quantity: item.quantity,
@@ -41,14 +50,10 @@ export async function getCartItems(orderId: number) {
   })) as CartItem[];
 }
 
-// Salva as alterações do carrinho (Sync)
+// Sync entire cart (Bulk Update)
 export async function syncCart(orderId: number, items: CartItemInput[]) {
   const supabase = await supabaseServer();
 
-  // Transforma o array de objetos em formato que o Postgres aceita (array de composite types)
-  // O Supabase JS client lida bem com JSON, mas para RPC com tipos customizados, passar como JSONB é mais seguro
-  // Mas como definimos o tipo no banco, vamos tentar passar direto. Se falhar, mudamos para JSON.
-  
   const { error } = await supabase
     .rpc('sync_cart', { 
       order_id_input: orderId, 
@@ -60,49 +65,9 @@ export async function syncCart(orderId: number, items: CartItemInput[]) {
   revalidatePath('/cart');
 }
 
-
-
-
-// Atualiza o endereço de entrega do pedido
-export async function updateOrderAddress(orderId: number, addressId: number) {
-  const supabase = await supabaseServer();
-
-  const { error } = await supabase
-    .from('orders')
-    .update({ address_id: addressId })
-    .eq('id', orderId);
-
-  if (error) {
-    console.error('updateOrderAddress error:', error);
-    throw new Error('Failed to update order address');
-  }
-
-  revalidatePath('/cart');     // Recalculates delivery fee
-  revalidatePath('/checkout'); // Updates total in checkout
-}
-
-// Busca dados básicos do pedido atual (para saber o total)
-export async function getCurrentOrder(orderId: number) {
-  const supabase = await supabaseServer();
-
-  const { data, error } = await supabase
-    .from('orders')
-    .select('id, total_price, delivery_fee, discount')
-    .eq('id', orderId)
-    .single();
-
-  if (error) {
-    console.error('getCurrentOrder error:', error);
-    return null;
-  }
-
-  return data;
-}
-
-// Nova função para atualizar item único (Client-Side friendly)
+// Update single item (Client-friendly)
 export async function updateCartItem(orderId: number, productId: number, quantity: number) {
-  // Aqui usamos o cliente do browser (createSupabaseClient) porque será chamado de um Contexto Client-Side
-  // Se usássemos supabaseServer(), daria erro de cookies no client
+  // Use client-side client for immediate interactions
   const supabase = createSupabaseClient();
 
   const { error } = await supabase
@@ -113,9 +78,49 @@ export async function updateCartItem(orderId: number, productId: number, quantit
     });
 
   if (error) {
-    console.error('updateCartItem error:', error);
+    console.error('[updateCartItem] Error:', error);
     throw new Error('Failed to update item');
   }
 
   revalidatePath('/cart');
+}
+
+// ==========================================
+// ORDER DETAILS
+// ==========================================
+
+// Update delivery address
+export async function updateOrderAddress(orderId: number, addressId: number) {
+  const supabase = await supabaseServer();
+
+  const { error } = await supabase
+    .from('orders')
+    .update({ address_id: addressId })
+    .eq('id', orderId);
+
+  if (error) {
+    console.error('[updateOrderAddress] Error:', error);
+    throw new Error('Failed to update order address');
+  }
+
+  revalidatePath('/cart');     
+  revalidatePath('/checkout/address');
+}
+
+// Get basic order info (Total, Fees)
+export async function getCurrentOrder(orderId: number) {
+  const supabase = await supabaseServer();
+
+  const { data, error } = await supabase
+    .from('orders')
+    .select('id, total_price, delivery_fee, discount')
+    .eq('id', orderId)
+    .single();
+
+  if (error) {
+    console.error('[getCurrentOrder] Error:', error);
+    return null;
+  }
+
+  return data;
 }

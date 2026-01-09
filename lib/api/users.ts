@@ -10,7 +10,7 @@ export async function getSupermarketUsers(chainId: number) {
     .rpc('get_supermarket_users', { chain_id_input: chainId });
 
   if (error) {
-    console.error('getSupermarketUsers error:', error);
+    console.error('[getSupermarketUsers] Error:', error);
     throw new Error('Failed to load users');
   }
 

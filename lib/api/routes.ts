@@ -12,7 +12,7 @@ export async function getPendingRoutingOrders(branchId: number) {
     .rpc('get_pending_routing_orders', { branch_id_input: branchId });
 
   if (error) {
-    console.error('getPendingRoutingOrders error:', error);
+    console.error('[getPendingRoutingOrders] Error:', error);
     return [];
   }
 
@@ -26,39 +26,46 @@ export async function getActiveRoutes() {
     .rpc('get_active_routes_summary');
 
   if (error) {
-    console.error('getActiveRoutes error:', error);
+    console.error('[getActiveRoutes] Error:', error);
     return [];
   }
 
   return data as ActiveRouteSummary[];
 }
 
-// Cria uma nova rota com os pedidos selecionados
 export async function createRoute(orderIds: number[]) {
-  // Usamos o client-side client pois esta ação é disparada pelo usuário no browser
+  // Use client-side client for user interaction triggered actions
   const supabase = createSupabaseClient();
+  
+  // 1. Get Branch ID from first order (to link route to branch)
+  const { data: firstOrder } = await supabase
+      .from('orders')
+      .select('branch_id')
+      .eq('id', orderIds[0])
+      .single();
 
-  // 1. Criar a rota (Estimativas simplificadas por enquanto)
-  // Em um cenário real, calcularíamos via Google Maps API ou similar antes de salvar
+  if (!firstOrder) throw new Error("Orders not found");
+
+  // 2. Create Route
   const { data: route, error: routeError } = await supabase
     .from('route')
     .insert({
-      estimated_time: orderIds.length * 15, // Ex: 15 min por pedido
-      estimated_distance: orderIds.length * 2.5, // Ex: 2.5 km por pedido
-      actual_time: null
+      branch_id: firstOrder.branch_id,
+      estimated_time: orderIds.length * 15, 
+      estimated_distance: orderIds.length * 2.5,
+      status: 'PENDING'
     })
     .select()
     .single();
 
   if (routeError) throw new Error(`Erro ao criar rota: ${routeError.message}`);
 
-  // 2. Atualizar os pedidos para vincular à rota e mudar status
-  // Cast para 'any' no status se o type definition estiver desatualizado em relação ao banco
+  // 3. Update Orders
   const { error: ordersError } = await supabase
     .from('orders')
     .update({
       route_id: route.id,
-      status: 'PENDING' 
+      status: 'A_CAMINHO' // Changed from 'PENDING' to match order flow
     } as any)
     .in('id', orderIds);
 
@@ -69,7 +76,6 @@ export async function createRoute(orderIds: number[]) {
   return route;
 }
 
-
 export async function getRouteOrders(routeId: number) {
   const supabase = await supabaseServer();
 
@@ -77,7 +83,7 @@ export async function getRouteOrders(routeId: number) {
     .rpc('get_route_details', { route_id_input: routeId });
 
   if (error) {
-    console.error('getRouteOrders error:', error);
+    console.error('[getRouteOrders] Error:', error);
     return [];
   }
 

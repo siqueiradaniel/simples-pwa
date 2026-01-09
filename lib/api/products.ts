@@ -10,7 +10,7 @@ export async function getProductsForBranch(branchId: number) {
     .rpc('get_products_for_branch', { bid: branchId });
 
   if (error) {
-    console.error('getProductsForBranch error:', error);
+    console.error('[getProductsForBranch] Error:', error);
     throw new Error('Failed to load products for branch');
   }
 

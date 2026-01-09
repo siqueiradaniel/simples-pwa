@@ -10,7 +10,7 @@ export async function getSupermarketProducts(chainId: number) {
     .rpc('get_supermarket_products', { chain_id_input: chainId });
 
   if (error) {
-    console.error('getSupermarketProducts error:', error);
+    console.error('[getSupermarketProducts] Error:', error);
     throw new Error('Failed to load supermarket products');
   }
 

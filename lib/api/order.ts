@@ -3,7 +3,6 @@
 import { supabaseServer } from '../supabase/server';
 import { OrderDetails, OrderItem } from '@/types';
 
-// Busca o cabeçalho do pedido
 export async function getOrderDetails(orderId: number) {
   const supabase = await supabaseServer();
 
@@ -12,14 +11,13 @@ export async function getOrderDetails(orderId: number) {
     .single();
 
   if (error) {
-    console.error('getOrderDetails error:', error);
+    console.error('[getOrderDetails] Error:', error);
     return null;
   }
 
   return data as OrderDetails;
 }
 
-// Busca os itens do pedido
 export async function getOrderItems(orderId: number) {
   const supabase = await supabaseServer();
 
@@ -27,7 +25,7 @@ export async function getOrderItems(orderId: number) {
     .rpc('get_order_items_by_id', { order_id_input: orderId });
 
   if (error) {
-    console.error('getOrderItems error:', error);
+    console.error('[getOrderItems] Error:', error);
     return [];
   }
 
