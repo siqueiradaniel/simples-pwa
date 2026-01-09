@@ -1,22 +1,25 @@
+import { notFound } from "next/navigation";
 import AddressFormClient from "@/components/address/AddressFormClient";
 import { getAddressById } from "@/lib/api/address";
-import { notFound } from "next/navigation";
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
 export default async function EditAddressPage({ params }: PageProps) {
+  // 1. Resolve os parâmetros da URL (Next.js 15+)
   const { id } = await params;
-  const userId = 'ca463a4e-ec85-4052-991f-dd3af9406693';; // Fixo por enquanto
 
-  // Busca os dados no servidor antes de renderizar
-  const address = await getAddressById(Number(id));
+  // 2. Busca os dados do endereço (ID é string/UUID)
+  // Nota: A proteção de rota (Auth) é feita pelo Middleware
+  const address = await getAddressById(id);
 
-  // Se o ID não existir, mostra página 404 padrão do Next
+  // 3. Se não encontrar (ou RLS bloquear), retorna 404
   if (!address) {
     notFound();
   }
 
-  return <AddressFormClient initialData={address} userId={userId} />;
+  // 4. Renderiza o cliente
+  // O Client Component gerencia o estado do usuário via Zustand
+  return <AddressFormClient initialData={address} />;
 }

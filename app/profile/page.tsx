@@ -1,15 +1,25 @@
+import { redirect, notFound } from "next/navigation";
 import UserDataForm from "@/components/users/UserDataForm";
 import { getUserById } from "@/lib/api/user";
-import { notFound } from "next/navigation";
+import { supabaseServer } from "@/lib/supabase/server";
 
 export default async function ProfileEditPage() {
-  const userId = 'ca463a4e-ec85-4052-991f-dd3af9406693'; // Fixo por enquanto, futuramente pegar da sessão do Supabase (auth.uid())
+  const supabase = await supabaseServer();
   
-  const user = await getUserById(userId);
+  // 1. Pega o usuário da SESSÃO (Auth)
+  const { data: { user: authUser } } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (!authUser) {
+    redirect("/login");
+  }
+
+  // 2. Pega os dados do PERFIL (Banco de Dados)
+  const profile = await getUserById(authUser.id);
+
+  if (!profile) {
     notFound();
   }
 
-  return <UserDataForm user={user} />;
+  // Passamos o email do AuthUser separadamente, pois não existe na tabela profiles
+  return <UserDataForm profile={profile} email={authUser.email || ''} />;
 }

@@ -1,14 +1,64 @@
 'use client';
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { MapPin, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+
 import AddressListHeader from "./AddressListHeader";
 import AddressCard from "./AddressCard";
 import { UserAddress } from "@/types";
-import { MapPin } from "lucide-react";
-import Link from "next/link";
+import { useUserStore } from "@/lib/store/userStore";
+import { getUserAddresses } from "@/lib/api/address";
 
-export default function AddressListClient({ addresses }: { addresses: UserAddress[] }) {
+export default function AddressListClient() {
+  const router = useRouter();
+  const { user, isLoading: isUserLoading } = useUserStore();
+  
+  const [addresses, setAddresses] = useState<UserAddress[]>([]);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+
+  useEffect(() => {
+    // 1. Redirecionamento se não autenticado
+    if (!isUserLoading && !user) {
+      router.push('/login?next=/addresses');
+      return;
+    }
+
+    // 2. Busca dados se autenticado
+    if (user && !isUserLoading) {
+      const fetchAddresses = async () => {
+        try {
+          // Agora chama a API atualizada que aceita UUID
+          const data = await getUserAddresses(user.id);
+          setAddresses(data);
+        } catch (error) {
+          console.error("Erro ao buscar endereços:", error);
+          toast.error("Não foi possível carregar seus endereços.");
+        } finally {
+          setIsLoadingData(false);
+        }
+      };
+
+      fetchAddresses();
+    }
+  }, [user, isUserLoading, router]);
+
+  // Loading State
+  if (isUserLoading || isLoadingData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="flex flex-col items-center gap-2">
+          <Loader2 className="animate-spin text-blue-600" size={32} />
+          <p className="text-gray-500 text-sm">Carregando endereços...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 font-sans pb-10">
+    <div className="min-h-screen bg-gray-50 font-sans pb-24">
       <AddressListHeader />
 
       <div className="p-4 flex flex-col gap-4">

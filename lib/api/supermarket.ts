@@ -16,3 +16,21 @@ export async function getSupermarketChain(chainId: number) {
 
   return data as SupermarketWithBranch[];
 }
+
+// Busca configurações básicas da rede (valor mínimo, logo, etc)
+export async function getSupermarketSettings(chainId: number) {
+  const supabase = await supabaseServer();
+  
+  const { data, error } = await supabase
+    .from('supermarket_chain')
+    .select('minimum_order_value, delivery_end_time')
+    .eq('id', chainId)
+    .single();
+
+  if (error) {
+    console.error('getSupermarketSettings error:', error);
+    return null;
+  }
+  
+  return data;
+}

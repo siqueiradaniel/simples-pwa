@@ -1,24 +1,28 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft, MapPin, Home, Briefcase, MoreHorizontal, Loader2, Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Address } from "@/types";
 import { saveAddress, linkAddressToUser } from "@/lib/api/address";
 import { toast } from "sonner";
+import { useUserStore } from "@/lib/store/userStore"; // Importando a Store
 
 interface AddressFormClientProps {
-  initialData?: Address; // Opcional, vem preenchido na edição
-  userId: string; // Passado pelo Server Component
+  initialData?: Address; // Opcional (undefined na criação)
 }
 
-export default function AddressFormClient({ initialData, userId }: AddressFormClientProps) {
+export default function AddressFormClient({ initialData }: AddressFormClientProps) {
   const router = useRouter();
+  
+  // 1. Recupera o usuário do Store Global
+  const { user, isLoading: isUserLoading } = useUserStore();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [formData, setFormData] = useState<Address>({
-    id: initialData?.id, // Mantém o ID se for edição
+    id: initialData?.id,
     cep: initialData?.cep || "",
     street: initialData?.street || "",
     number: initialData?.number || 0,
@@ -33,6 +37,14 @@ export default function AddressFormClient({ initialData, userId }: AddressFormCl
   const [customLabel, setCustomLabel] = useState("");
   const [isDefault, setIsDefault] = useState(false);
   const [loadingCep, setLoadingCep] = useState(false);
+
+  // Proteção extra no cliente
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      toast.error("Sessão expirada. Faça login novamente.");
+      router.push("/login");
+    }
+  }, [user, isUserLoading, router]);
 
   const handleCepBlur = async () => {
     const cep = formData.cep.replace(/\D/g, '');
@@ -49,9 +61,12 @@ export default function AddressFormClient({ initialData, userId }: AddressFormCl
             city: data.localidade,
             state: data.uf
           }));
+        } else {
+            toast.error("CEP não encontrado.");
         }
       } catch (error) {
         console.error("Erro CEP", error);
+        toast.error("Erro ao buscar CEP.");
       } finally {
         setLoadingCep(false);
       }
@@ -59,6 +74,14 @@ export default function AddressFormClient({ initialData, userId }: AddressFormCl
   };
 
   const handleSubmit = async () => {
+    if (!user) return;
+
+    // Validação básica
+    if (!formData.street || !formData.number || !formData.neighborhood || !formData.cep) {
+        toast.error("Preencha os campos obrigatórios.");
+        return;
+    }
+
     setIsSubmitting(true);
     try {
       // 1. Salva/Atualiza o endereço físico
@@ -68,25 +91,33 @@ export default function AddressFormClient({ initialData, userId }: AddressFormCl
       });
 
       if (savedAddress && savedAddress.id) {
-        // 2. Cria/Atualiza vínculo com usuário
+        // 2. Cria/Atualiza vínculo com usuário usando ID do Store
         await linkAddressToUser(
-          userId, 
+          user.id, 
           savedAddress.id, 
           labelType === "Outro" ? customLabel : labelType, 
           isDefault
         );
 
-        toast.success("Endereço salvo!");
-        router.back(); // Volta para a tela anterior (lista ou perfil)
-        router.refresh(); // Atualiza os dados da tela anterior
+        toast.success("Endereço salvo com sucesso!");
+        router.back(); 
+        router.refresh(); 
       }
     } catch (error) {
       console.error(error);
-      toast.error("Erro ao salvar.");
+      toast.error("Erro ao salvar endereço.");
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (isUserLoading) {
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-white">
+            <Loader2 className="animate-spin text-blue-600" size={32} />
+        </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white font-sans pb-10">
@@ -101,17 +132,19 @@ export default function AddressFormClient({ initialData, userId }: AddressFormCl
 
       <div className="p-5 space-y-6">
         <div className="w-full h-40 bg-blue-50 rounded-2xl border border-blue-100 relative overflow-hidden flex items-center justify-center">
-          <div className="absolute inset-0 opacity-30 bg-blue-200/50 pattern-grid-lg" />
+          <div className="absolute inset-0 opacity-30 bg-blue-200/50" 
+               style={{ backgroundImage: 'radial-gradient(#3b82f6 0.5px, transparent 0.5px)', backgroundSize: '10px 10px' }} 
+          />
           <div className="z-10 bg-white px-4 py-2 rounded-full shadow-sm text-xs font-semibold text-blue-600 flex items-center gap-2">
             <MapPin size={14} />
-            Escolha no mapa
+            Preencher pelo CEP
           </div>
         </div>
 
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-gray-500 uppercase">CEP</label>
+              <label className="text-xs font-bold text-gray-500 uppercase">CEP *</label>
               <div className="relative">
                 <Input 
                   value={formData.cep}
@@ -129,14 +162,14 @@ export default function AddressFormClient({ initialData, userId }: AddressFormCl
                 value={formData.city ? `${formData.city}/${formData.state}` : ''}
                 readOnly
                 placeholder="..."
-                className="h-11 bg-gray-100 border-gray-200"
+                className="h-11 bg-gray-100 border-gray-200 cursor-not-allowed"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-[1fr_100px] gap-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-gray-500 uppercase">Rua</label>
+              <label className="text-xs font-bold text-gray-500 uppercase">Rua *</label>
               <Input 
                 value={formData.street}
                 onChange={e => setFormData({...formData, street: e.target.value})}
@@ -145,7 +178,7 @@ export default function AddressFormClient({ initialData, userId }: AddressFormCl
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-gray-500 uppercase">Número</label>
+              <label className="text-xs font-bold text-gray-500 uppercase">Número *</label>
               <Input 
                 type="number"
                 value={formData.number || ''}
@@ -157,7 +190,7 @@ export default function AddressFormClient({ initialData, userId }: AddressFormCl
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-gray-500 uppercase">Bairro</label>
+            <label className="text-xs font-bold text-gray-500 uppercase">Bairro *</label>
             <Input 
               value={formData.neighborhood}
               onChange={e => setFormData({...formData, neighborhood: e.target.value})}
@@ -172,6 +205,16 @@ export default function AddressFormClient({ initialData, userId }: AddressFormCl
               value={formData.complement || ''}
               onChange={e => setFormData({...formData, complement: e.target.value})}
               placeholder="Ap. 101 (Opcional)"
+              className="h-11 bg-gray-50 border-gray-200"
+            />
+          </div>
+          
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-gray-500 uppercase">Ponto de Referência</label>
+            <Input 
+              value={formData.reference || ''}
+              onChange={e => setFormData({...formData, reference: e.target.value})}
+              placeholder="Ex: Ao lado da padaria"
               className="h-11 bg-gray-50 border-gray-200"
             />
           </div>
@@ -211,18 +254,18 @@ export default function AddressFormClient({ initialData, userId }: AddressFormCl
         </div>
 
         <div 
-          className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl cursor-pointer"
+          className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors"
           onClick={() => setIsDefault(!isDefault)}
         >
           <div className={`w-6 h-6 rounded-md border flex items-center justify-center transition-colors ${isDefault ? 'bg-blue-600 border-blue-600' : 'bg-white border-gray-300'}`}>
             {isDefault && <Check size={16} className="text-white" />}
           </div>
-          <span className="text-sm font-medium text-gray-700">Usar como principal</span>
+          <span className="text-sm font-medium text-gray-700">Usar como endereço principal</span>
         </div>
 
         <button
           onClick={handleSubmit}
-          disabled={isSubmitting}
+          disabled={isSubmitting || !user}
           className="w-full bg-blue-900 text-white font-bold text-sm py-4 rounded-xl shadow-lg shadow-blue-900/20 active:scale-[0.98] transition-all disabled:opacity-70 flex items-center justify-center gap-2"
         >
           {isSubmitting && <Loader2 size={18} className="animate-spin" />}

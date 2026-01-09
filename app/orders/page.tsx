@@ -1,14 +1,20 @@
+import { redirect } from "next/navigation";
+import { supabaseServer } from "@/lib/supabase/server";
+import { getUserOrders } from "@/lib/api/orders";
 import OrdersListPageClient from "@/components/order/OrdersListPageClient";
-import { getOrdersWithUsers } from "@/lib/api/orders";
-import { OrderWithUser } from "@/types";
 
 export default async function OrdersPage() {
-  const branchId = 1; // Fixo por enquanto
-  const userId = 'ca463a4e-ec85-4052-991f-dd3af9406693';; // User ID fixo
+  const supabase = await supabaseServer();
   
-  // Busca todos e filtra pelo usuário
-  const allOrders = await getOrdersWithUsers(branchId);
-  const userOrders = allOrders.filter((order: any) => order.user_id === userId);
+  // 1. Verifica autenticação
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect('/login?next=/orders');
+  }
+
+  // 2. Busca pedidos do usuário (Seguro via RLS)
+  const userOrders = await getUserOrders();
 
   return <OrdersListPageClient orders={userOrders} />;
 }

@@ -4,54 +4,64 @@ import { revalidatePath } from 'next/cache';
 import { supabaseServer } from '../supabase/server';
 import { Address, UserAddress } from '@/types';
 
-// Busca um endereço pelo ID (Para edição)
-export async function getAddressById(addressId: number) {
+// ==========================================
+// BUSCAR ENDEREÇO POR ID (UUID)
+// ==========================================
+export async function getAddressById(addressId: string): Promise<Address | null> {
   const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .from('address')
     .select('*')
-    .eq('id', addressId)
+    .eq('id', addressId) // Supabase trata UUID automaticamente aqui
     .single();
 
   if (error) {
-    console.error('getAddressById error:', error);
-    return null; // Retorna null se não achar, para tratarmos na página
+    console.error(`[getAddressById] Error fetching address ${addressId}:`, error.message);
+    return null;
   }
 
   return data as Address;
 }
 
-// Salva o endereço físico (Cria ou Atualiza)
-export async function saveAddress(address: Address) {
+// ==========================================
+// SALVAR ENDEREÇO (Cria ou Atualiza)
+// ==========================================
+export async function saveAddress(address: Partial<Address>) {
   const supabase = await supabaseServer();
   const { id, ...addressData } = address;
 
-  // 1. Prepare the query (don't await yet)
-  // Logic: If ID exists > Update. Otherwise > Insert.
-  const mutation = (id && id > 0)
+  // Se tiver ID (UUID válido), atualiza. Senão, cria.
+  // Nota: Verifique se seu Address type no frontend espera string no ID agora.
+  const mutation = id 
     ? supabase.from('address').update(addressData).eq('id', id).select().single()
     : supabase.from('address').insert(addressData).select().single();
 
-  // 2. Execute and wait for result
   const { data, error } = await mutation;
 
   if (error) {
-    console.error('saveAddress Error:', error); // Good practice to log it
-    throw new Error(error.message);
+    throw new Error(`Erro ao salvar endereço: ${error.message}`);
   }
 
-  // 3. Revalidate (Clean execution)
+  // Revalida as rotas que usam endereços
   revalidatePath('/addresses');
   revalidatePath('/checkout/address');
 
   return data;
 }
 
-// Vincula endereço ao usuário
-export async function linkAddressToUser(userId: string, addressId: number, label: string, isDefault: boolean) {
+// ==========================================
+// VINCULAR ENDEREÇO AO USUÁRIO
+// ==========================================
+export async function linkAddressToUser(
+  userId: string, 
+  addressId: string, // Alterado para string (UUID)
+  label: string, 
+  isDefault: boolean
+) {
   const supabase = await supabaseServer();
 
+  // Transação implícita: Resetar default se necessário
   if (isDefault) {
     await supabase
       .from('user_address')
@@ -59,7 +69,7 @@ export async function linkAddressToUser(userId: string, addressId: number, label
       .eq('user_id', userId);
   }
 
-  // Verifica se já existe vínculo (para edição de label/default)
+  // Verifica vínculo existente (Upsert logic manual para controle refinado)
   const { data: existingLink } = await supabase
     .from('user_address')
     .select('id')
@@ -68,27 +78,29 @@ export async function linkAddressToUser(userId: string, addressId: number, label
     .single();
 
   if (existingLink) {
-    const { error } = await supabase
+    await supabase
       .from('user_address')
       .update({ label, is_default: isDefault })
       .eq('id', existingLink.id);
-    if (error) throw new Error(error.message);
   } else {
-    const { error } = await supabase.from('user_address').insert({
-      user_id: userId,
-      address_id: addressId,
-      label: label,
-      is_default: isDefault
-    });
-    if (error) throw new Error(error.message);
+    await supabase
+      .from('user_address')
+      .insert({
+        user_id: userId,
+        address_id: addressId,
+        label,
+        is_default: isDefault
+      });
   }
 
   revalidatePath('/addresses');
   revalidatePath('/checkout/address');
 }
 
-// Busca todos os endereços de um usuário
-export async function getUserAddresses(userId: string) {
+// ==========================================
+// LISTAR ENDEREÇOS
+// ==========================================
+export async function getUserAddresses(userId: string): Promise<UserAddress[]> {
   const supabase = await supabaseServer();
 
   const { data, error } = await supabase
@@ -99,28 +111,20 @@ export async function getUserAddresses(userId: string) {
       address_id,
       label,
       is_default,
-      address (
-        id,
-        street,
-        number,
-        neighborhood,
-        city,
-        state,
-        cep,
-        complement,
-        reference
-      )
+      address (*) 
     `)
     .eq('user_id', userId)
-    .order('is_default', { ascending: false }); // Padrão primeiro
+    .order('is_default', { ascending: false });
 
-  if (error) {
-    console.error('getUserAddresses error:', error);
-    return [];
-  }
+  if (error || !data) return [];
 
-  // Ajuste de tipagem para garantir que o retorno corresponda ao esperado
-  // O supabase retorna um array de objetos onde 'address' é um objeto único ou array dependendo da relação
-  // Aqui assumimos que é um objeto único (relação 1:1 no join)
-  return data as unknown as UserAddress[];
+  // Mapeamento plano (Flattening) para facilitar o frontend
+  return data.map((item: any) => ({
+    id: item.id,
+    user_id: item.user_id,
+    address_id: item.address_id,
+    label: item.label,
+    is_default: item.is_default,
+    ...item.address // Espalha as propriedades do endereço (street, number, etc) na raiz
+  })) as UserAddress[];
 }

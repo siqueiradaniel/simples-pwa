@@ -2,23 +2,16 @@
 
 import { revalidatePath } from 'next/cache';
 import { supabaseServer } from '../supabase/server';
+import { Database } from '@/types/supabase';
 
-export type UserProfile = {
-  id: number;
-  full_name: string;
-  email: string;
-  phone_number: string;
-  birth_date: string;
-  cpf: string;
-  user_role: 'ADMIN' | 'CUSTOMER' | 'MANAGER';
-};
+export type UserProfile = Database['public']['Tables']['profiles']['Row'];
 
-// Busca dados do usuário pelo ID
+// Busca dados do perfil
 export async function getUserById(userId: string) {
   const supabase = await supabaseServer();
 
   const { data, error } = await supabase
-    .from('users')
+    .from('profiles')
     .select('*')
     .eq('id', userId)
     .single();
@@ -28,15 +21,15 @@ export async function getUserById(userId: string) {
     return null;
   }
 
-  return data as UserProfile;
+  return data;
 }
 
-// Atualiza dados do usuário
-export async function updateUser(userId: number, data: Partial<UserProfile>) {
+// Atualiza dados do perfil (Tabela profiles)
+export async function updateUser(userId: string, data: Partial<UserProfile>) {
   const supabase = await supabaseServer();
 
   const { error } = await supabase
-    .from('users')
+    .from('profiles')
     .update(data)
     .eq('id', userId);
 
@@ -44,5 +37,18 @@ export async function updateUser(userId: number, data: Partial<UserProfile>) {
     throw new Error(error.message);
   }
 
-  revalidatePath('/', 'layout'); // Refreshes everything (Header, Profile, etc.)
+  revalidatePath('/', 'layout');
+}
+
+// NOVA: Atualiza a senha (Supabase Auth)
+export async function updateUserPassword(password: string) {
+  const supabase = await supabaseServer();
+  
+  const { error } = await supabase.auth.updateUser({ 
+    password: password 
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
 }
