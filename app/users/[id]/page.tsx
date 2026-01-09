@@ -11,7 +11,7 @@ export default async function UserViewPage({ params }: PageProps) {
   
   // Busca segura no servidor. 
   // Em um app real, aqui verificaríamos se o usuário logado tem permissão de 'MANAGER' ou 'ADMIN' antes de buscar.
-  const user = await getUserById(Number(id));
+  const user = await getUserById(id);
 
   if (!user) {
     notFound();

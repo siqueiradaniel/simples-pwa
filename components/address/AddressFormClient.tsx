@@ -7,20 +7,34 @@ import { Input } from "@/components/ui/input";
 import { Address } from "@/types";
 import { saveAddress, linkAddressToUser } from "@/lib/api/address";
 import { toast } from "sonner";
-import { useUserStore } from "@/lib/store/userStore"; // Importando a Store
+import { useUserStore } from "@/lib/store/userStore";
 
 interface AddressFormClientProps {
-  initialData?: Address; // Opcional (undefined na criação)
+  initialData?: Address;
+  initialUser?: any; // Recebe o usuário do servidor
 }
 
-export default function AddressFormClient({ initialData }: AddressFormClientProps) {
+export default function AddressFormClient({ initialData, initialUser }: AddressFormClientProps) {
   const router = useRouter();
   
-  // 1. Recupera o usuário do Store Global
-  const { user, isLoading: isUserLoading } = useUserStore();
-
+  const { user, setUserState } = useUserStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  // Define o usuário atual (Prioridade: Store > Props do Servidor)
+  // Isso garante que currentUser nunca seja null na renderização inicial
+  const currentUser = user || (initialUser ? { id: initialUser.id, email: initialUser.email } : null);
+
+  // Hidratação imediata do Zustand (sem piscar tela)
+  useEffect(() => {
+    if (initialUser && !user) {
+      setUserState({
+        user: { id: initialUser.id, email: initialUser.email },
+        profile: null,
+        isLoading: false
+      });
+    }
+  }, [initialUser, user, setUserState]);
+
   const [formData, setFormData] = useState<Address>({
     id: initialData?.id,
     cep: initialData?.cep || "",
@@ -37,14 +51,6 @@ export default function AddressFormClient({ initialData }: AddressFormClientProp
   const [customLabel, setCustomLabel] = useState("");
   const [isDefault, setIsDefault] = useState(false);
   const [loadingCep, setLoadingCep] = useState(false);
-
-  // Proteção extra no cliente
-  useEffect(() => {
-    if (!isUserLoading && !user) {
-      toast.error("Sessão expirada. Faça login novamente.");
-      router.push("/login");
-    }
-  }, [user, isUserLoading, router]);
 
   const handleCepBlur = async () => {
     const cep = formData.cep.replace(/\D/g, '');
@@ -74,9 +80,11 @@ export default function AddressFormClient({ initialData }: AddressFormClientProp
   };
 
   const handleSubmit = async () => {
-    if (!user) return;
+    if (!currentUser) {
+        toast.error("Sessão inválida. Atualize a página.");
+        return;
+    }
 
-    // Validação básica
     if (!formData.street || !formData.number || !formData.neighborhood || !formData.cep) {
         toast.error("Preencha os campos obrigatórios.");
         return;
@@ -84,16 +92,14 @@ export default function AddressFormClient({ initialData }: AddressFormClientProp
 
     setIsSubmitting(true);
     try {
-      // 1. Salva/Atualiza o endereço físico
       const savedAddress = await saveAddress({
         ...formData, 
         number: Number(formData.number)
       });
 
       if (savedAddress && savedAddress.id) {
-        // 2. Cria/Atualiza vínculo com usuário usando ID do Store
         await linkAddressToUser(
-          user.id, 
+          currentUser.id, 
           savedAddress.id, 
           labelType === "Outro" ? customLabel : labelType, 
           isDefault
@@ -111,7 +117,8 @@ export default function AddressFormClient({ initialData }: AddressFormClientProp
     }
   };
 
-  if (isUserLoading) {
+  // Se por algum motivo extremo não tiver usuário (nem server nem client), aí sim mostra loader
+  if (!currentUser) {
     return (
         <div className="min-h-screen flex items-center justify-center bg-white">
             <Loader2 className="animate-spin text-blue-600" size={32} />
@@ -131,6 +138,7 @@ export default function AddressFormClient({ initialData }: AddressFormClientProp
       </div>
 
       <div className="p-5 space-y-6">
+        {/* Banner CEP */}
         <div className="w-full h-40 bg-blue-50 rounded-2xl border border-blue-100 relative overflow-hidden flex items-center justify-center">
           <div className="absolute inset-0 opacity-30 bg-blue-200/50" 
                style={{ backgroundImage: 'radial-gradient(#3b82f6 0.5px, transparent 0.5px)', backgroundSize: '10px 10px' }} 
@@ -141,6 +149,7 @@ export default function AddressFormClient({ initialData }: AddressFormClientProp
           </div>
         </div>
 
+        {/* Formulário */}
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
@@ -265,7 +274,7 @@ export default function AddressFormClient({ initialData }: AddressFormClientProp
 
         <button
           onClick={handleSubmit}
-          disabled={isSubmitting || !user}
+          disabled={isSubmitting || !currentUser}
           className="w-full bg-blue-900 text-white font-bold text-sm py-4 rounded-xl shadow-lg shadow-blue-900/20 active:scale-[0.98] transition-all disabled:opacity-70 flex items-center justify-center gap-2"
         >
           {isSubmitting && <Loader2 size={18} className="animate-spin" />}

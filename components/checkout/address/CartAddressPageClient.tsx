@@ -1,25 +1,30 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { ChevronLeft, Plus, Loader2 } from "lucide-react";
+import { ChevronLeft, Plus, Loader2, LogIn } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "sonner";
+
 import { UserAddress } from "@/types";
 import CheckoutStepper from "@/components/checkout/cart/CheckoutStepper";
 import { updateOrderAddress, getCurrentOrder } from "@/lib/api/cart";
 import { useCartStore } from "@/lib/store/cartStore";
-import { toast } from "sonner";
 import { useUserStore } from "@/lib/store/userStore";
 import { getUserAddresses } from "@/lib/api/address";
 
 import SelectableAddressCard from "@/components/checkout/address/SelectableAddressCard";
 import CartFooter from "@/components/checkout/cart/CartFooter";
 
-export default function CartAddressPageClient() {
+interface CartAddressPageClientProps {
+  initialUser: any; // Recebe do servidor
+}
+
+export default function CartAddressPageClient({ initialUser }: CartAddressPageClientProps) {
   const router = useRouter();
   
   // 1. Estados Globais (Zustand)
-  const { user, isLoading: isUserLoading } = useUserStore();
+  const { user, setUserState } = useUserStore();
   const { items, orderId } = useCartStore();
 
   // 2. Estados Locais
@@ -29,48 +34,53 @@ export default function CartAddressPageClient() {
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
-  // 3. Efeito para carregar dados
+  // Define o usuário atual (Prioridade: Store > Props do Servidor)
+  const currentUser = user || { id: initialUser.id, email: initialUser.email };
+
+  // 3. Hidratação e Carregamento de Dados
   useEffect(() => {
-    // Se terminou de verificar auth e não tem usuário, redireciona
-    if (!isUserLoading && !user) {
-      router.push('/login?next=/checkout/address');
-      return;
+    // A. Hidrata o Zustand se necessário
+    if (initialUser && !user) {
+      setUserState({
+        user: { id: initialUser.id, email: initialUser.email },
+        profile: null, // Perfil carrega depois se precisar, aqui só precisamos do ID
+        isLoading: false
+      });
     }
 
-    // Se temos usuário, carregamos os dados
-    if (user && !isUserLoading) {
-      const loadData = async () => {
-        try {
-          setIsLoadingData(true);
-          
-          // Busca endereços
-          const addrList = await getUserAddresses(user.id);
-          setAddresses(addrList);
-          
-          // Define seleção padrão (Default ou Primeiro da lista)
-          const defaultAddr = addrList.find((a: any) => a.is_default)?.address_id || addrList[0]?.address_id;
-          if (defaultAddr) setSelectedAddressId(defaultAddr);
+    // B. Carrega dados da página (Endereços e Totais)
+    const loadData = async () => {
+      try {
+        setIsLoadingData(true);
+        
+        // Busca endereços usando o ID garantido
+        const addrList = await getUserAddresses(currentUser.id);
+        setAddresses(addrList);
+        
+        // Lógica de seleção padrão
+        const defaultAddr = addrList.find((a: any) => a.is_default)?.address_id || addrList[0]?.address_id;
+        if (defaultAddr) setSelectedAddressId(defaultAddr);
 
-          // Se tivermos um ID de pedido, busca o total atual do servidor
-          // (Útil caso o carrinho esteja vazio no zustand mas tenha valor no banco)
-          if (orderId) {
-            const orderData = await getCurrentOrder(orderId);
-            setServerTotal(orderData?.total_price || 0);
-          }
-        } catch (error) {
-          console.error("Erro ao carregar dados de checkout:", error);
-          toast.error("Erro ao carregar informações.");
-        } finally {
-          setIsLoadingData(false);
+        // Busca total do pedido no servidor (fallback se zustand estiver vazio)
+        if (orderId) {
+          const orderData = await getCurrentOrder(orderId);
+          setServerTotal(orderData?.total_price || 0);
         }
-      };
+      } catch (error) {
+        console.error("Erro ao carregar dados de checkout:", error);
+        toast.error("Erro ao carregar informações.");
+      } finally {
+        setIsLoadingData(false);
+      }
+    };
 
-      loadData();
-    }
-  }, [user, isUserLoading, orderId, router]);
+    loadData();
+    
+    // REMOVIDO: O bloco "if (!user) router.push..." que causava o loop.
+    // Dependências ajustadas para evitar re-execuções desnecessárias
+  }, [initialUser, user, setUserState, orderId, currentUser.id]);
 
-  // 4. Lógica de Cálculo do Total
-  // Prioriza o cálculo local (otimista) do Zustand, senão usa o do servidor
+  // 4. Cálculo do Total
   const storeTotal = items.reduce((acc, item) => acc + (item.unit_price * item.quantity), 0);
   const displayTotal = items.length > 0 ? storeTotal : serverTotal;
 
@@ -80,33 +90,32 @@ export default function CartAddressPageClient() {
       toast.success("Por favor, selecione um endereço de entrega.");
       return;
     }
-
+    
+    // Fallback de segurança se o orderId não estiver no Zustand
     if (!orderId) {
-      toast.error("Carrinho não encontrado.");
+      toast.error("Carrinho não encontrado. Tente atualizar a página.");
       return;
     }
 
     setIsSaving(true);
     try {
       await updateOrderAddress(orderId, selectedAddressId);
-      // Próximo passo: Pagamento
       router.push('/checkout/payment');
-      toast.success("Endereço vinculado!");
+      toast.success("Endereço selecionado!");
     } catch (error) {
       console.error(error);
-      toast.error("Erro ao selecionar endereço. Tente novamente.");
+      toast.error("Erro ao vincular endereço.");
     } finally {
       setIsSaving(false);
     }
   };
 
-  // Renderização de Loading Inicial
-  if (isUserLoading || isLoadingData) {
+  if (isLoadingData) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="animate-spin text-blue-600" size={32} />
-          <p className="text-gray-500 text-sm font-medium">Carregando endereços...</p>
+          <p className="text-gray-500 text-sm font-medium">A carregar endereços...</p>
         </div>
       </div>
     );
@@ -126,13 +135,13 @@ export default function CartAddressPageClient() {
       </div>
 
       <div className="px-4 mt-6">
-        <h1 className="text-lg font-bold text-gray-900 mb-4 text-center">Selecione o endereço</h1>
+        <h1 className="text-lg font-bold text-gray-900 mb-4 text-center">Onde vamos entregar?</h1>
 
         <div className="flex flex-col gap-3">
           {addresses.length > 0 ? (
             addresses.map((addr) => (
               <SelectableAddressCard
-                key={addr.id} // Usando id único da tabela user_address ou address
+                key={addr.id}
                 userAddress={addr}
                 isSelected={selectedAddressId === addr.address_id}
                 onSelect={() => setSelectedAddressId(addr.address_id)}
@@ -160,7 +169,7 @@ export default function CartAddressPageClient() {
         total={displayTotal}
         onNext={handleContinue}
         isLoading={isSaving}
-        buttonText="CONTINUAR PARA PAGAMENTO"
+        buttonText="IR PARA PAGAMENTO"
         isButtonDisabled={!selectedAddressId} 
       />
     </div>

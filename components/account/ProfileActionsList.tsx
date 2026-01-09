@@ -51,13 +51,13 @@ export default function ProfileActionsList({ userId }: ProfileActionsListProps) 
       })}
       
       { /* LOGOUT */}
-      {/* <button className="w-full flex items-center justify-between px-4 py-4 active:bg-red-50 transition-colors group">
+      <button className="w-full flex items-center justify-between px-4 py-4 active:bg-red-50 transition-colors group">
         <div className="flex items-center gap-3">
           <LogOut size={20} className="text-red-500" strokeWidth={1.5} />
           <span className="text-sm font-medium text-red-500">Sair</span>
         </div>
         <ChevronRight size={16} className="text-gray-400 group-active:text-red-300" />
-      </button> */}
+      </button>
     </div>
   );
 }

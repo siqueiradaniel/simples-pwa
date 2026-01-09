@@ -35,7 +35,6 @@ export default function UserDataDisplay({ user }: UserDataDisplayProps) {
             <User size={40} />
           </div>
           <h2 className="text-lg font-bold text-gray-900">{user.full_name}</h2>
-          <p className="text-sm text-gray-500">ID: {user.id}</p>
         </div>
 
         {/* Campos Read-Only */}
@@ -59,7 +58,7 @@ export default function UserDataDisplay({ user }: UserDataDisplayProps) {
                 <Phone size={12} /> Telefone
               </label>
               <Input 
-                value={user.phone_number}
+                value={user.phone_number ?? '-'}
                 readOnly
                 className="h-11 bg-white border-gray-200 text-gray-700"
               />
@@ -71,7 +70,7 @@ export default function UserDataDisplay({ user }: UserDataDisplayProps) {
               </label>
               <div className="relative">
                 <Input 
-                  value={user.birth_date}
+                  value={user.birth_date ?? '-'}
                   readOnly
                   className="h-11 bg-white border-gray-200 text-gray-700"
                 />
