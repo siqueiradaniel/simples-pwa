@@ -1,44 +1,39 @@
 'use client';
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { useUserStore } from "@/lib/store/userStore";
 import ProfileActionsList from "@/components/account/ProfileActionsList";
 import ProfileImageContent from "@/components/account/ProfileImageContent";
-import { Loader2 } from "lucide-react";
 
-export default function AccountPageClient() {
-  const { user, profile, isLoading } = useUserStore();
-  const router = useRouter();
+// Recebe os dados prontos do servidor
+interface AccountPageClientProps {
+  initialUser: any;
+  initialProfile: any;
+}
 
-  // Proteção de rota no cliente (caso o middleware falhe ou para UX instantânea)
+export default function AccountPageClient({ initialUser, initialProfile }: AccountPageClientProps) {
+  const { user, profile, setUserState } = useUserStore();
+
+  // "Hidrata" o store imediatamente com os dados do servidor
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/login?next=/account');
+    if (initialUser && !user) {
+      setUserState({
+        user: { id: initialUser.id, email: initialUser.email },
+        profile: initialProfile,
+        isLoading: false
+      });
     }
-  }, [user, isLoading, router]);
+  }, [initialUser, initialProfile, user, setUserState]);
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <Loader2 className="animate-spin text-blue-600" size={32} />
-      </div>
-    );
-  }
-
-  // Se não tiver usuário, retorna null enquanto redireciona
-  if (!user) return null;
-
-  // Lógica de nome: Tenta o perfil, senão o email, senão "Visitante"
-  const clientName = profile?.full_name || user.email?.split('@')[0] || "Visitante";
+  // Usa os dados do store OU os iniciais (Fallback seguro)
+  const currentUser = user || { id: initialUser.id, email: initialUser.email };
+  const currentProfile = profile || initialProfile;
+  const clientName = currentProfile?.full_name || currentUser.email?.split('@')[0] || "Visitante";
 
   return (
     <div className="min-h-screen bg-white font-sans pb-24">
-      {/* Header com a foto/iniciais e nome */}
       <ProfileImageContent name={clientName} />
-      
-      {/* Lista de ações passando o ID do usuário logado */}
-      <ProfileActionsList userId={user.id} />
+      <ProfileActionsList userId={currentUser.id} />
     </div>
   );
 }

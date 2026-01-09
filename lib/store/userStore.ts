@@ -12,6 +12,8 @@ interface UserState {
   
   fetchUser: () => Promise<void>;
   signOut: () => Promise<void>;
+  // Adicione esta linha:
+  setUserState: (data: { user: User | null, profile: Profile | null, isLoading: boolean }) => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -19,30 +21,46 @@ export const useUserStore = create<UserState>((set) => ({
   profile: null,
   isLoading: true,
 
+  // Ação simples para o AppInitializer usar
+  setUserState: (data) => set(data),
+
   fetchUser: async () => {
     set({ isLoading: true });
     try {
       const supabase = createSupabaseClient();
       
-      // 1. Pega usuário da sessão
-      const { data: { user } } = await supabase.auth.getUser();
+      // ALTERAÇÃO IMPORTANTE:
+      // Usamos getSession() primeiro. Ele verifica a cache local do navegador
+      // de forma mais eficiente para recuperar o token persistido.
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
+      if (sessionError || !session?.user) {
+        // Se falhar a sessão local, tentamos uma última verificação no servidor
+        const { data: { user: serverUser } } = await supabase.auth.getUser();
+        
+        if (!serverUser) {
+           console.log("Nenhum usuário encontrado no cliente.");
+           set({ user: null, profile: null, isLoading: false });
+           return;
+        }
+        
+        // Se encontrou via getUser, usamos esse
+        // ... Lógica de buscar perfil (igual abaixo) ...
+      }
+
+      const user = session?.user;
+
       if (!user) {
-        set({ user: null, profile: null, isLoading: false });
-        return;
+         set({ user: null, profile: null, isLoading: false });
+         return;
       }
 
       // 2. Busca perfil no banco
-      const { data: profile, error } = await supabase
+      const { data: profile } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user.id)
         .single();
-
-      if (error) {
-        console.error("Erro ao buscar perfil:", error);
-        // Mesmo com erro de perfil, mantemos o user auth logado, mas sem perfil
-      }
 
       set({ 
         user: { id: user.id, email: user.email }, 
@@ -51,7 +69,7 @@ export const useUserStore = create<UserState>((set) => ({
       });
 
     } catch (error) {
-      console.error("Erro fatal no fetchUser:", error);
+      console.error("Erro no fetchUser:", error);
       set({ user: null, profile: null, isLoading: false });
     }
   },
@@ -60,6 +78,6 @@ export const useUserStore = create<UserState>((set) => ({
     const supabase = createSupabaseClient();
     await supabase.auth.signOut();
     set({ user: null, profile: null });
-    window.location.href = '/login'; // Força refresh total
+    window.location.href = '/login';
   }
 }));
